@@ -45,10 +45,10 @@ namespace Chummer
             InitializeComponent();
             LanguageManager.TranslateWinForm(GlobalOptions.Language, this);
             _objCharacter = objCharacter;
-            _xmlBaseCritterPowerDataNode = XmlManager.Load("critterpowers.xml").GetFastNavigator().SelectSingleNode("/chummer");
+            _xmlBaseCritterPowerDataNode = XmlManager.Load("critterpowers.xml", _objCharacter.Options.CustomDataDictionary).GetFastNavigator().SelectSingleNode("/chummer");
             if (_objCharacter.IsCritter)
             {
-                _xmlMetatypeDataNode = XmlManager.Load("critters.xml").GetFastNavigator().SelectSingleNode("/chummer/metatypes/metatype[name = \"" + _objCharacter.Metatype + "\"]");
+                _xmlMetatypeDataNode = XmlManager.Load("critters.xml", objCharacter.Options.CustomDataDictionary).GetFastNavigator().SelectSingleNode("/chummer/metatypes/metatype[name = \"" + _objCharacter.Metatype + "\"]");
                 if (_xmlMetatypeDataNode != null && !string.IsNullOrEmpty(_objCharacter.Metavariant) && _objCharacter.Metavariant != "None")
                 {
                     XPathNavigator xmlMetavariantNode = _xmlMetatypeDataNode.SelectSingleNode("/metavariants/metavariant[name = \"" + _objCharacter.Metavariant + "\"]");
@@ -58,7 +58,7 @@ namespace Chummer
             }
             if (_xmlMetatypeDataNode == null)
             {
-                _xmlMetatypeDataNode = XmlManager.Load("metatypes.xml").GetFastNavigator().SelectSingleNode("/chummer/metatypes/metatype[name = \"" + _objCharacter.Metatype + "\"]");
+                _xmlMetatypeDataNode = XmlManager.Load("metatypes.xml", objCharacter.Options.CustomDataDictionary).GetFastNavigator().SelectSingleNode("/chummer/metatypes/metatype[name = \"" + _objCharacter.Metatype + "\"]");
                 if (_xmlMetatypeDataNode != null && !string.IsNullOrEmpty(_objCharacter.Metavariant) && _objCharacter.Metavariant != "None")
                 {
                     XPathNavigator xmlMetavariantNode = _xmlMetatypeDataNode.SelectSingleNode("/metavariants/metavariant[name = \"" + _objCharacter.Metavariant + "\"]");

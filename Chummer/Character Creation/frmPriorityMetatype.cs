@@ -51,15 +51,15 @@ namespace Chummer
             LanguageManager.TranslateWinForm(GlobalOptions.Language, this);
 
             _lstPrioritySkills = new List<string>(objCharacter.PriorityBonusSkillList);
-            XmlDocument xmlMetatypeDoc = XmlManager.Load(strXmlFile);
+            XmlDocument xmlMetatypeDoc = XmlManager.Load(strXmlFile, objCharacter.Options.CustomDataDictionary);
             _xmlMetatypeDocumentMetatypesNode = xmlMetatypeDoc.SelectSingleNode("/chummer/metatypes");
             _xmlBaseMetatypeDataNode = xmlMetatypeDoc.GetFastNavigator().SelectSingleNode("/chummer");
-            _xmlBasePriorityDataNode = XmlManager.Load("priorities.xml").GetFastNavigator().SelectSingleNode("/chummer");
-            _xmlBaseSkillDataNode = XmlManager.Load("skills.xml").GetFastNavigator().SelectSingleNode("/chummer");
-            XmlDocument xmlQualityDoc = XmlManager.Load("qualities.xml");
+            _xmlBasePriorityDataNode = XmlManager.Load("priorities.xml", objCharacter.Options.CustomDataDictionary).GetFastNavigator().SelectSingleNode("/chummer");
+            _xmlBaseSkillDataNode = XmlManager.Load("skills.xml", _objCharacter.Options.CustomDataDictionary).GetFastNavigator().SelectSingleNode("/chummer");
+            XmlDocument xmlQualityDoc = XmlManager.Load("qualities.xml", _objCharacter.Options.CustomDataDictionary);
             _xmlQualityDocumentQualitiesNode = xmlQualityDoc.SelectSingleNode("/chummer/qualities");
             _xmlBaseQualityDataNode = xmlQualityDoc.GetFastNavigator().SelectSingleNode("/chummer");
-            _xmlCritterPowerDocumentPowersNode = XmlManager.Load("critterpowers.xml").SelectSingleNode("/chummer/powers");
+            _xmlCritterPowerDocumentPowersNode = XmlManager.Load("critterpowers.xml", _objCharacter.Options.CustomDataDictionary).SelectSingleNode("/chummer/powers");
         }
         
         private void frmPriorityMetatype_Load(object sender, EventArgs e)
@@ -599,7 +599,7 @@ namespace Chummer
                 int intMinModifier = 0;
                 int intMaxModifier = 0;
                 //TODO: What the hell is this for?
-                /*if (_strXmlFile == "critters.xml")
+                /*if (_strXmlFile == "critters.xml", objCharacter.Options.CustomDataDictionary)
                 {
                     if (strSelectedMetatypeCategory == "Technocritters")
                     {
@@ -833,7 +833,7 @@ namespace Chummer
                 }
 
                 // Load the Priority information.
-                XmlNode objXmlGameplayOption = XmlManager.Load("gameplayoptions.xml").SelectSingleNode("/chummer/gameplayoptions/gameplayoption[name = \"" + _objCharacter.GameplayOption + "\"]");
+                XmlNode objXmlGameplayOption = XmlManager.Load("gameplayoptions.xml", _objCharacter.Options.CustomDataDictionary).SelectSingleNode("/chummer/gameplayoptions/gameplayoption[name = \"" + _objCharacter.GameplayOption + "\"]");
                 if (objXmlGameplayOption != null)
                 {
                     string strKarma = objXmlGameplayOption["karma"].InnerText;

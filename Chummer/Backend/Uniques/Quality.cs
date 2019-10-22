@@ -202,7 +202,7 @@ namespace Chummer
             using (XmlNodeList xmlAddWeaponList = objXmlQuality.SelectNodes("addweapon"))
                 if (xmlAddWeaponList?.Count > 0)
                 {
-                    XmlDocument objXmlWeaponDocument = XmlManager.Load("weapons.xml");
+                    XmlDocument objXmlWeaponDocument = XmlManager.Load("weapons.xml", _objCharacter.Options.CustomDataDictionary);
                     foreach (XmlNode objXmlAddWeapon in xmlAddWeaponList)
                     {
                         string strLoopID = objXmlAddWeapon.InnerText;
@@ -444,7 +444,10 @@ namespace Chummer
                 string strQualityType = Type.ToString();
                 if (strLanguageToPrint != GlobalOptions.DefaultLanguage)
                 {
-                    strQualityType = XmlManager.Load("qualities.xml", strLanguageToPrint).SelectSingleNode("/chummer/categories/category[. = \"" + strQualityType + "\"]/@translate")?.InnerText ?? strQualityType;
+                    strQualityType =
+                        XmlManager.Load("qualities.xml", _objCharacter.Options.CustomDataDictionary, strLanguageToPrint)
+                            .SelectSingleNode("/chummer/categories/category[. = \"" + strQualityType + "\"]/@translate")
+                            ?.InnerText ?? strQualityType;
                 }
                 objWriter.WriteElementString("qualitytype", strQualityType);
                 objWriter.WriteElementString("qualitytype_english", Type.ToString());
@@ -769,9 +772,9 @@ namespace Chummer
             if (_objCachedMyXmlNode == null || strLanguage != _strCachedXmlNodeLanguage || GlobalOptions.LiveCustomData)
             {
                 _objCachedMyXmlNode = SourceID == Guid.Empty
-                    ? XmlManager.Load("qualities.xml", strLanguage)
+                    ? XmlManager.Load("qualities.xml", _objCharacter.Options.CustomDataDictionary, strLanguage)
                         .SelectSingleNode($"/chummer/qualities/quality[name = \"{Name}\"]")
-                    : XmlManager.Load("qualities.xml", strLanguage)
+                    : XmlManager.Load("qualities.xml", _objCharacter.Options.CustomDataDictionary, strLanguage)
                         .SelectSingleNode($"/chummer/qualities/quality[id = \"{SourceIDString}\" or id = \"{SourceIDString.ToUpperInvariant()}\"]");
                 _strCachedXmlNodeLanguage = strLanguage;
             }

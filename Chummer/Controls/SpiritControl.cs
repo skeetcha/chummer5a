@@ -326,8 +326,8 @@ namespace Chummer
             }
             string strCurrentValue = cboSpiritName.SelectedValue?.ToString() ?? _objSpirit.Name;
 
-            XmlDocument objXmlDocument = _objSpirit.EntityType == SpiritType.Spirit ? XmlManager.Load("traditions.xml") : XmlManager.Load("streams.xml");
-            XmlDocument objXmlCritterDocument = XmlManager.Load("critters.xml");
+            XmlDocument objXmlDocument = _objSpirit.EntityType == SpiritType.Spirit ? XmlManager.Load("traditions.xml", new Dictionary<string, bool>()) : XmlManager.Load("streams.xml", new Dictionary<string, bool>());
+            XmlDocument objXmlCritterDocument = XmlManager.Load("critters.xml", new Dictionary<string, bool>());
 
             HashSet<string> lstLimitCategories = new HashSet<string>();
             foreach (Improvement improvement in _objSpirit.CharacterObject.Improvements.Where(x => x.ImproveType == Improvement.ImprovementType.LimitSpiritCategory && x.Enabled))
@@ -451,7 +451,7 @@ namespace Chummer
         private void CreateCritter(string strCritterName, int intForce)
         {
             // Code from frmMetatype.
-            XmlDocument objXmlDocument = XmlManager.Load("critters.xml");
+            XmlDocument objXmlDocument = XmlManager.Load("critters.xml", new Dictionary<string, bool>());
 
             XmlNode objXmlMetatype = objXmlDocument.SelectSingleNode("/chummer/metatypes/metatype[name = \"" + strCritterName + "\"]");
 
@@ -564,7 +564,7 @@ namespace Chummer
             if (objXmlMetatype["movement"] != null)
                 objCharacter.Movement = objXmlMetatype["movement"].InnerText;
             // Load the Qualities file.
-            XmlDocument objXmlQualityDocument = XmlManager.Load("qualities.xml");
+            XmlDocument objXmlQualityDocument = XmlManager.Load("qualities.xml", objCharacter.Options.CustomDataDictionary);
 
             // Determine if the Metatype has any bonuses.
             if (objXmlMetatype.InnerXml.Contains("bonus"))
@@ -589,7 +589,7 @@ namespace Chummer
             // Add any Critter Powers the Metatype/Critter should have.
             XmlNode objXmlCritter = objXmlDocument.SelectSingleNode("/chummer/metatypes/metatype[name = \"" + objCharacter.Metatype + "\"]");
 
-            objXmlDocument = XmlManager.Load("critterpowers.xml");
+            objXmlDocument = XmlManager.Load("critterpowers.xml", objCharacter.Options.CustomDataDictionary);
             foreach (XmlNode objXmlPower in objXmlCritter.SelectNodes("powers/power"))
             {
                 XmlNode objXmlCritterPower = objXmlDocument.SelectSingleNode("/chummer/powers/power[name = \"" + objXmlPower.InnerText + "\"]");
@@ -616,7 +616,7 @@ namespace Chummer
                 }
             }
             // Add any Complex Forms the Critter comes with (typically Sprites)
-            XmlDocument objXmlProgramDocument = XmlManager.Load("complexforms.xml");
+            XmlDocument objXmlProgramDocument = XmlManager.Load("complexforms.xml", objCharacter.Options.CustomDataDictionary);
             foreach (XmlNode objXmlComplexForm in objXmlCritter.SelectNodes("complexforms/complexform"))
             {
                 string strForceValue = objXmlComplexForm.Attributes?["select"]?.InnerText ?? string.Empty;
@@ -627,7 +627,7 @@ namespace Chummer
             }
 
             // Add any Gear the Critter comes with (typically Programs for A.I.s)
-            XmlDocument objXmlGearDocument = XmlManager.Load("gear.xml");
+            XmlDocument objXmlGearDocument = XmlManager.Load("gear.xml", objCharacter.Options.CustomDataDictionary);
             foreach (XmlNode objXmlGear in objXmlCritter.SelectNodes("gears/gear"))
             {
                 int intRating = 0;
@@ -643,7 +643,7 @@ namespace Chummer
             }
 
             // Add the Unarmed Attack Weapon to the character.
-            objXmlDocument = XmlManager.Load("weapons.xml");
+            objXmlDocument = XmlManager.Load("weapons.xml", objCharacter.Options.CustomDataDictionary);
             XmlNode objXmlWeapon = objXmlDocument.SelectSingleNode("/chummer/weapons/weapon[name = \"Unarmed Attack\"]");
             if (objXmlWeapon != null)
             {

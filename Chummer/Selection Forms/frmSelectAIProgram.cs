@@ -49,11 +49,11 @@ namespace Chummer
             _blnAdvancedProgramAllowed = blnAdvancedProgramAllowed;
             _blnInherentProgram = blnInherentProgram;
             // Load the Programs information.
-            _xmlBaseChummerNode = XmlManager.Load("programs.xml").GetFastNavigator().SelectSingleNode("/chummer");
+            _xmlBaseChummerNode = XmlManager.Load("programs.xml", objCharacter.Options.CustomDataDictionary).GetFastNavigator().SelectSingleNode("/chummer");
             if (_objCharacter.IsCritter)
             {
-                _xmlOptionalAIProgramsNode = XmlManager.Load("critters.xml").GetFastNavigator().SelectSingleNode("/chummer/metatypes/metatype[name = \"" + _objCharacter.Metatype + "\"]") ??
-                                            XmlManager.Load("metatypes.xml").GetFastNavigator().SelectSingleNode("/chummer/metatypes/metatype[name = \"" + _objCharacter.Metatype + "\"]");
+                _xmlOptionalAIProgramsNode = XmlManager.Load("critters.xml", objCharacter.Options.CustomDataDictionary).GetFastNavigator().SelectSingleNode("/chummer/metatypes/metatype[name = \"" + _objCharacter.Metatype + "\"]") ??
+                                            XmlManager.Load("metatypes.xml", objCharacter.Options.CustomDataDictionary).GetFastNavigator().SelectSingleNode("/chummer/metatypes/metatype[name = \"" + _objCharacter.Metatype + "\"]");
                 if (_xmlOptionalAIProgramsNode != null)
                 {
                     if (!string.IsNullOrEmpty(_objCharacter.Metavariant) && _objCharacter.Metavariant != "None")

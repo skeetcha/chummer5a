@@ -160,7 +160,7 @@ namespace Chummer.Backend.Equipment
                 if (lstGridNodes?.Count > 0)
                 {
                     FreeGrids.Clear();
-                    XmlDocument xmlLifestyleDocument = XmlManager.Load("lifestyles.xml");
+                    XmlDocument xmlLifestyleDocument = XmlManager.Load("lifestyles.xml", _objCharacter.Options.CustomDataDictionary);
                     foreach (XmlNode xmlNode in lstGridNodes)
                     {
                         XmlNode xmlQuality = xmlLifestyleDocument.SelectSingleNode("/chummer/qualities/quality[name = \"" + xmlNode.InnerText + "\"]");
@@ -281,7 +281,10 @@ namespace Chummer.Backend.Equipment
             objNode.TryGetDecFieldQuickly("percentage", ref _decPercentage);
             objNode.TryGetStringFieldQuickly("baselifestyle", ref _strBaseLifestyle);
             objNode.TryGetInt32FieldQuickly("sortorder", ref _intSortOrder);
-            if (XmlManager.Load("lifestyles.xml").SelectSingleNode($"/chummer/lifestyles/lifestyle[name =\"{_strBaseLifestyle}\"]") == null && XmlManager.Load("lifestyles.xml").SelectSingleNode($"/chummer/lifestyles/lifestyle[name =\"{_strName}\"]") != null)
+            if (XmlManager.Load("lifestyles.xml", _objCharacter.Options.CustomDataDictionary)
+                    .SelectSingleNode($"/chummer/lifestyles/lifestyle[name =\"{_strBaseLifestyle}\"]") == null &&
+                XmlManager.Load("lifestyles.xml", _objCharacter.Options.CustomDataDictionary)
+                    .SelectSingleNode($"/chummer/lifestyles/lifestyle[name =\"{_strName}\"]") != null)
             {
                 string baselifestyle = _strName;
                 _strName = _strBaseLifestyle;
@@ -293,7 +296,7 @@ namespace Chummer.Backend.Equipment
                 if (string.IsNullOrWhiteSpace(_strBaseLifestyle))
                     {
                         List<ListItem> lstQualities = new List<ListItem>();
-                        using (XmlNodeList xmlLifestyleList = XmlManager.Load("lifestyles.xml").SelectNodes("/chummer/lifestyles/lifestyle"))
+                        using (XmlNodeList xmlLifestyleList = XmlManager.Load("lifestyles.xml", _objCharacter.Options.CustomDataDictionary).SelectNodes("/chummer/lifestyles/lifestyle"))
                             if (xmlLifestyleList != null)
                                 foreach (XmlNode xmlLifestyle in xmlLifestyleList)
                                 {
@@ -381,7 +384,7 @@ namespace Chummer.Backend.Equipment
             //Lifestyles would previously store the entire calculated value of their Cost, Area, Comforts and Security. Better to have it be a volatile Complex Property.
             if (_objCharacter.LastSavedVersion <= new Version("5.197.0") && xmlLifestyleNode["costforarea"] == null)
             {
-                XmlDocument objXmlDocument = XmlManager.Load("lifestyles.xml");
+                XmlDocument objXmlDocument = XmlManager.Load("lifestyles.xml", _objCharacter.Options.CustomDataDictionary);
                 XmlNode objLifestyleQualityNode = objXmlDocument.SelectSingleNode("/chummer/lifestyles/lifestyle[name = \"" + _strBaseLifestyle + "\"]");
                 if (objLifestyleQualityNode != null)
                 {
@@ -648,7 +651,7 @@ namespace Chummer.Backend.Equipment
                 if (_strBaseLifestyle != value)
                 {
                     _strBaseLifestyle = value;
-                    XmlDocument xmlLifestyleDocument = XmlManager.Load("lifestyles.xml");
+                    XmlDocument xmlLifestyleDocument = XmlManager.Load("lifestyles.xml", _objCharacter.Options.CustomDataDictionary);
                     // This needs a handler for translations, will fix later.
                     if (value == "Bolt Hole")
                     {
@@ -881,9 +884,9 @@ namespace Chummer.Backend.Equipment
             if (_objCachedMyXmlNode == null || strLanguage != _strCachedXmlNodeLanguage || GlobalOptions.LiveCustomData)
             {
                 _objCachedMyXmlNode = SourceID == Guid.Empty
-                    ? XmlManager.Load("lifestyles.xml", strLanguage)
+                    ? XmlManager.Load("lifestyles.xml", _objCharacter.Options.CustomDataDictionary, strLanguage)
                         .SelectSingleNode($"/chummer/lifestyles/lifestyle[name = \"{Name}\"]")
-                    : XmlManager.Load("lifestyles.xml", strLanguage)
+                    : XmlManager.Load("lifestyles.xml", _objCharacter.Options.CustomDataDictionary, strLanguage)
                         .SelectSingleNode($"/chummer/lifestyles/lifestyle[id = \"{SourceIDString}\" or id = \"{SourceIDString}\"]");
                 _strCachedXmlNodeLanguage = strLanguage;
             }

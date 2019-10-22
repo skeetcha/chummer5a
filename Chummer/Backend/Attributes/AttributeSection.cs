@@ -231,7 +231,7 @@ namespace Chummer.Backend.Attributes
                 objAttribute.UnbindAttribute();
             AttributeList.Clear();
 			SpecialAttributeList.Clear();
-            XmlDocument objXmlDocument = XmlManager.Load(_objCharacter.IsCritter ? "critters.xml" : "metatypes.xml");
+            XmlDocument objXmlDocument = XmlManager.Load(_objCharacter.IsCritter ? "critters.xml" : "metatypes.xml", _objCharacter.Options.CustomDataDictionary);
             XmlNode xmlMetatypeNode = objXmlDocument.SelectSingleNode("/chummer/metatypes/metatype[name = \"" + _objCharacter.Metatype + "\"]");
             XmlNode xmlCharNode = xmlMetatypeNode?.SelectSingleNode("metavariants/metavariant[name = \"" + _objCharacter.Metavariant + "\"]") ?? xmlMetatypeNode;
             // We only want to remake attributes for shifters in career mode, because they only get their second set of attributes when exporting from create mode into career mode
@@ -325,7 +325,7 @@ namespace Chummer.Backend.Attributes
                 objAttribute.UnbindAttribute();
             AttributeList.Clear();
             SpecialAttributeList.Clear();
-            XmlDocument objXmlDocument = XmlManager.Load(_objCharacter.IsCritter ? "critters.xml" : "metatypes.xml");
+            XmlDocument objXmlDocument = XmlManager.Load(_objCharacter.IsCritter ? "critters.xml" : "metatypes.xml", _objCharacter.Options.CustomDataDictionary);
             XmlNode xmlMetatypeNode = objXmlDocument.SelectSingleNode("/chummer/metatypes/metatype[name = \"" + _objCharacter.Metatype + "\"]");
             XmlNode xmlCharNode = xmlMetatypeNode?.SelectSingleNode("metavariants/metavariant[name = \"" + _objCharacter.Metavariant + "\"]") ?? xmlMetatypeNode;
             // We only want to remake attributes for shifters in career mode, because they only get their second set of attributes when exporting from create mode into career mode
@@ -550,7 +550,7 @@ namespace Chummer.Backend.Attributes
 		{
 		    if (_objCharacter.MetatypeCategory == "Shapeshifter")
 		    {
-		        XmlDocument xmlMetatypesDoc = XmlManager.Load("metatypes.xml", strLanguageToPrint);
+		        XmlDocument xmlMetatypesDoc = XmlManager.Load("metatypes.xml", _objCharacter.Options.CustomDataDictionary, strLanguageToPrint);
 		        XmlNode xmlNode = xmlMetatypesDoc.SelectSingleNode($"/chummer/metatypes/metatype[name = \"{_objCharacter.Metatype}\"]");
 
 		        xmlNode = xmlNode?.SelectSingleNode($"metavariants/metavariant[name = \"{_objCharacter.Metavariant}\"]/name/@translate");

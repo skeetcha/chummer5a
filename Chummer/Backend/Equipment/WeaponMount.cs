@@ -315,7 +315,7 @@ namespace Chummer.Backend.Equipment
         /// <param name="xmlNode"></param>
         public void CreateByName(XmlNode xmlNode)
         {
-            XmlDocument xmlDoc = XmlManager.Load("vehicles.xml");
+            XmlDocument xmlDoc = XmlManager.Load("vehicles.xml", _objCharacter.Options.CustomDataDictionary);
             WeaponMount objMount = this;
             XmlNode xmlDataNode = xmlDoc.SelectSingleNode($"/chummer/weaponmounts/weaponmount[name = \"{xmlNode["size"]?.InnerText}\" and category = \"Size\"]");
             if (xmlDataNode != null)
@@ -420,7 +420,7 @@ namespace Chummer.Backend.Equipment
             if (strLanguage == GlobalOptions.DefaultLanguage)
                 return Category;
 
-            return XmlManager.Load("vehicles.xml", strLanguage).SelectSingleNode("/chummer/categories/category[. = \"" + Category + "\"]/@translate")?.InnerText ?? Category;
+            return XmlManager.Load("vehicles.xml", _objCharacter.Options.CustomDataDictionary, strLanguage).SelectSingleNode("/chummer/categories/category[. = \"" + Category + "\"]/@translate")?.InnerText ?? Category;
         }
 
         /// <summary>
@@ -804,9 +804,9 @@ namespace Chummer.Backend.Equipment
             if (_objCachedMyXmlNode == null || strLanguage != _strCachedXmlNodeLanguage || GlobalOptions.LiveCustomData)
             {
                 _objCachedMyXmlNode = SourceID == Guid.Empty
-                    ? XmlManager.Load("vehicles.xml", strLanguage)
+                    ? XmlManager.Load("vehicles.xml", _objCharacter.Options.CustomDataDictionary, strLanguage)
                         .SelectSingleNode($"/chummer/weaponmounts/weaponmount[name = \"{Name}\"]")
-                    : XmlManager.Load("vehicles.xml", strLanguage)
+                    : XmlManager.Load("vehicles.xml", _objCharacter.Options.CustomDataDictionary, strLanguage)
                         .SelectSingleNode($"/chummer/weaponmounts/weaponmount[id = \"{SourceIDString}\" or id = \"{SourceIDString.ToUpperInvariant()}\"]");
                 _strCachedXmlNodeLanguage = strLanguage;
             }
@@ -1145,7 +1145,7 @@ namespace Chummer.Backend.Equipment
             if (strLanguage == GlobalOptions.DefaultLanguage)
                 return Category;
 
-            return XmlManager.Load("vehicles.xml", strLanguage).SelectSingleNode("/chummer/categories/category[. = \"" + Category + "\"]/@translate")?.InnerText ?? Category;
+            return XmlManager.Load("vehicles.xml", _objCharacter.Options.CustomDataDictionary, strLanguage).SelectSingleNode("/chummer/categories/category[. = \"" + Category + "\"]/@translate")?.InnerText ?? Category;
         }
 
         /// <summary>
@@ -1204,9 +1204,9 @@ namespace Chummer.Backend.Equipment
             if (_objCachedMyXmlNode == null || strLanguage != _strCachedXmlNodeLanguage || GlobalOptions.LiveCustomData)
             {
                 _objCachedMyXmlNode = SourceID == Guid.Empty
-                    ? XmlManager.Load("vehicles.xml", strLanguage)
+                    ? XmlManager.Load("vehicles.xml", _objCharacter.Options.CustomDataDictionary, strLanguage)
                         .SelectSingleNode($"/chummer/weaponmounts/weaponmount[name = \"{Name}\"]")
-                    : XmlManager.Load("vehicles.xml", strLanguage)
+                    : XmlManager.Load("vehicles.xml", _objCharacter.Options.CustomDataDictionary, strLanguage)
                         .SelectSingleNode($"/chummer/weaponmounts/weaponmount[id = \"{SourceIDString}\" or id = \"{SourceIDString.ToUpperInvariant()}\"]");
                 _strCachedXmlNodeLanguage = strLanguage;
             }

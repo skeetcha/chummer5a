@@ -50,14 +50,14 @@ namespace Chummer
             InitializeComponent();
             LanguageManager.TranslateWinForm(GlobalOptions.Language, this);
 
-            XmlDocument xmlMetatypeDoc = XmlManager.Load(strXmlFile);
+            XmlDocument xmlMetatypeDoc = XmlManager.Load(strXmlFile, _objCharacter.Options.CustomDataDictionary);
             _xmlMetatypeDocumentMetatypesNode = xmlMetatypeDoc.SelectSingleNode("/chummer/metatypes");
             _xmlBaseMetatypeDataNode = xmlMetatypeDoc.GetFastNavigator().SelectSingleNode("/chummer");
-            _xmlSkillsDocumentKnowledgeSkillsNode = XmlManager.Load("skills.xml").SelectSingleNode("/chummer/knowledgeskills");
-            XmlDocument xmlQualityDoc = XmlManager.Load("qualities.xml");
+            _xmlSkillsDocumentKnowledgeSkillsNode = XmlManager.Load("skills.xml", _objCharacter.Options.CustomDataDictionary).SelectSingleNode("/chummer/knowledgeskills");
+            XmlDocument xmlQualityDoc = XmlManager.Load("qualities.xml", _objCharacter.Options.CustomDataDictionary);
             _xmlQualityDocumentQualitiesNode = xmlQualityDoc.SelectSingleNode("/chummer/qualities");
             _xmlBaseQualityDataNode = xmlQualityDoc.GetFastNavigator().SelectSingleNode("/chummer");
-            _xmlCritterPowerDocumentPowersNode = XmlManager.Load("critterpowers.xml").SelectSingleNode("/chummer/powers");
+            _xmlCritterPowerDocumentPowersNode = XmlManager.Load("critterpowers.xml", _objCharacter.Options.CustomDataDictionary).SelectSingleNode("/chummer/powers");
         }
         
         private void frmMetatype_Load(object sender, EventArgs e)
@@ -452,7 +452,7 @@ namespace Chummer
                 }
 
                 // Add any Complex Forms the Critter comes with (typically Sprites)
-                XmlDocument xmlComplexFormDocument = XmlManager.Load("complexforms.xml");
+                XmlDocument xmlComplexFormDocument = XmlManager.Load("complexforms.xml", _objCharacter.Options.CustomDataDictionary);
                 foreach (XmlNode xmlComplexForm in charNode.SelectNodes("complexforms/complexform"))
                 {
                     XmlNode xmlComplexFormData = xmlComplexFormDocument.SelectSingleNode("/chummer/complexforms/complexform[name = \"" + xmlComplexForm.InnerText + "\"]");
@@ -488,7 +488,7 @@ namespace Chummer
                 }
 
                 // Add any Advanced Programs the Critter comes with (typically A.I.s)
-                XmlDocument xmlAIProgramDocument = XmlManager.Load("programs.xml");
+                XmlDocument xmlAIProgramDocument = XmlManager.Load("programs.xml", _objCharacter.Options.CustomDataDictionary);
                 foreach (XmlNode xmlAIProgram in charNode.SelectNodes("programs/program"))
                 {
                     XmlNode xmlAIProgramData = xmlAIProgramDocument.SelectSingleNode("/chummer/programs/program[name = \"" + xmlAIProgram.InnerText + "\"]");
@@ -523,7 +523,7 @@ namespace Chummer
                 }
 
                 // Add any Gear the Critter comes with (typically Programs for A.I.s)
-                XmlDocument xmlGearDocument = XmlManager.Load("gear.xml");
+                XmlDocument xmlGearDocument = XmlManager.Load("gear.xml", _objCharacter.Options.CustomDataDictionary);
                 foreach (XmlNode xmlGear in charNode.SelectNodes("gears/gear"))
                 {
                     XmlNode xmlGearData = xmlGearDocument.SelectSingleNode("/chummer/gears/gear[name = " + xmlGear["name"].InnerText.CleanXPath() + " and category = " + xmlGear["category"].InnerText.CleanXPath() + "]");

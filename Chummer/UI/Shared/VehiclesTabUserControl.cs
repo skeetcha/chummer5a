@@ -114,7 +114,7 @@ namespace Chummer.UI.Shared
                 return false;
 
             // Open the Vehicles XML file and locate the selected piece.
-            XmlDocument objXmlDocument = XmlManager.Load("vehicles.xml");
+            XmlDocument objXmlDocument = XmlManager.Load("vehicles.xml", objCharacter.Options.CustomDataDictionary);
 
             XmlNode objXmlVehicle = objXmlDocument.SelectSingleNode("/chummer/vehicles/vehicle[id = \"" + frmPickVehicle.SelectedVehicle + "\"]");
             Vehicle objVehicle = new Vehicle(_objCharacter);
@@ -229,7 +229,7 @@ namespace Chummer.UI.Shared
                     // Create a Vehicle Mod for the Retrofit.
                     VehicleMod objRetrofit = new VehicleMod(_objCharacter);
 
-                    XmlDocument objVehiclesDoc = XmlManager.Load("vehicles.xml");
+                    XmlDocument objVehiclesDoc = XmlManager.Load("vehicles.xml", objCharacter.Options.CustomDataDictionary);
                     XmlNode objXmlNode = objVehiclesDoc.SelectSingleNode("/chummer/mods/mod[name = \"Retrofit\"]");
                     objRetrofit.Create(objXmlNode, 0, objMod.Parent);
                     objRetrofit.Cost = decCost.ToString(GlobalOptions.InvariantCultureInfo);
@@ -1747,7 +1747,7 @@ namespace Chummer.UI.Shared
                 blnAddAgain = frmPickGear.AddAgain;
 
                 // Open the Gear XML file and locate the selected piece.
-                XmlDocument objXmlDocument = XmlManager.Load("gear.xml");
+                XmlDocument objXmlDocument = XmlManager.Load("gear.xml", objCharacter.Options.CustomDataDictionary);
                 XmlNode objXmlGear = objXmlDocument.SelectSingleNode("/chummer/gears/gear[id = \"" + frmPickGear.SelectedGear + "\"]");
 
                 // Create the new piece of Gear.
@@ -1869,7 +1869,7 @@ namespace Chummer.UI.Shared
             }
 
             // Open the Cyberware XML file and locate the selected piece.
-            XmlDocument objXmlDocument = XmlManager.Load("cyberware.xml");
+            XmlDocument objXmlDocument = XmlManager.Load("cyberware.xml", objCharacter.Options.CustomDataDictionary);
             bool blnAddAgain;
 
             do
@@ -2006,7 +2006,7 @@ namespace Chummer.UI.Shared
                 // Remove the trailing comma.
                 strCategories = strCategories.Substring(0, strCategories.Length - 1);
             }
-            XmlDocument objXmlDocument = XmlManager.Load("gear.xml");
+            XmlDocument objXmlDocument = XmlManager.Load("gear.xml", objCharacter.Options.CustomDataDictionary);
             bool blnAddAgain;
 
             do
@@ -2139,7 +2139,7 @@ namespace Chummer.UI.Shared
             }
 
             // Open the Gear XML file and locate the selected piece.
-            XmlDocument objXmlDocument = XmlManager.Load("gear.xml");
+            XmlDocument objXmlDocument = XmlManager.Load("gear.xml", objCharacter.Options.CustomDataDictionary);
             XmlNode objXmlSensorGear = objSensor.GetNode();
             string strCategories = string.Empty;
             XmlNodeList xmlAddonCategoryList = objXmlSensorGear?.SelectNodes("addoncategory");
@@ -2249,7 +2249,7 @@ namespace Chummer.UI.Shared
             }
 
             // Open the Gear XML file and locate the selected piece.
-            XmlDocument objXmlDocument = XmlManager.Load("gear.xml");
+            XmlDocument objXmlDocument = XmlManager.Load("gear.xml", objCharacter.Options.CustomDataDictionary);
             bool blnAddAgain;
 
             do
@@ -2350,7 +2350,7 @@ namespace Chummer.UI.Shared
                 return;
             }
 
-            XmlDocument objXmlDocument = XmlManager.Load("gear.xml");
+            XmlDocument objXmlDocument = XmlManager.Load("gear.xml", objCharacter.Options.CustomDataDictionary);
             bool blnAddAgain;
 
             do
@@ -2486,7 +2486,7 @@ namespace Chummer.UI.Shared
                 // Remove the trailing comma.
                 strCategories = strCategories.Substring(0, strCategories.Length - 1);
             }
-            XmlDocument objXmlDocument = XmlManager.Load("gear.xml");
+            XmlDocument objXmlDocument = XmlManager.Load("gear.xml", objCharacter.Options.CustomDataDictionary);
             bool blnAddAgain;
 
             do
@@ -2593,7 +2593,7 @@ namespace Chummer.UI.Shared
             }
 
             // Open the Vehicles XML file and locate the selected piece.
-            XmlDocument objXmlDocument = XmlManager.Load("vehicles.xml");
+            XmlDocument objXmlDocument = XmlManager.Load("vehicles.xml", objCharacter.Options.CustomDataDictionary);
 
             bool blnAddAgain;
 
@@ -2797,7 +2797,7 @@ namespace Chummer.UI.Shared
                 return false;
 
             // Open the Weapons XML file and locate the selected piece.
-            XmlDocument objXmlDocument = XmlManager.Load("weapons.xml");
+            XmlDocument objXmlDocument = XmlManager.Load("weapons.xml", _objCharacter.Options.CustomDataDictionary);
 
             XmlNode objXmlWeapon = objXmlDocument.SelectSingleNode("/chummer/weapons/weapon[id = \"" + frmPickWeapon.SelectedWeapon + "\"]");
 
@@ -2922,7 +2922,7 @@ namespace Chummer.UI.Shared
             }
 
             // Open the Weapons XML file and locate the selected Weapon.
-            XmlDocument objXmlDocument = XmlManager.Load("weapons.xml");
+            XmlDocument objXmlDocument = XmlManager.Load("weapons.xml", _objCharacter.Options.CustomDataDictionary);
             XmlNode objXmlWeapon = objWeapon.GetNode();
             if (objXmlWeapon == null)
             {
@@ -3025,7 +3025,7 @@ namespace Chummer.UI.Shared
                 return false;
 
             // Open the Weapons XML file and locate the selected piece.
-            XmlDocument objXmlDocument = XmlManager.Load("weapons.xml");
+            XmlDocument objXmlDocument = XmlManager.Load("weapons.xml", _objCharacter.Options.CustomDataDictionary);
 
             XmlNode objXmlWeapon = objXmlDocument.SelectSingleNode("/chummer/weapons/weapon[id = \"" + frmPickWeapon.SelectedWeapon + "\"]");
 

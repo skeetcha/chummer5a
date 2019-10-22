@@ -43,7 +43,7 @@ namespace Chummer
             LanguageManager.TranslateWinForm(GlobalOptions.Language, this);
             _objCharacter = objCharacter;
             _strCustomGroup = strCustomGroup;
-            _objDocument = XmlManager.Load("improvements.xml");
+            _objDocument = XmlManager.Load("improvements.xml", objCharacter.Options.CustomDataDictionary);
         }
 
         private void frmCreateImprovement_Load(object sender, EventArgs e)
@@ -174,7 +174,7 @@ namespace Chummer
             {
                 case "SelectActionDicePool":
                     List<ListItem> lstActions = new List<ListItem>();
-                    using (XmlNodeList xmlActionList = XmlManager.Load("actions.xml").SelectNodes("/chummer/actions/action"))
+                    using (XmlNodeList xmlActionList = XmlManager.Load("actions.xml", _objCharacter.Options.CustomDataDictionary).SelectNodes("/chummer/actions/action"))
                         if (xmlActionList != null)
                             foreach (XmlNode xmlAction in xmlActionList)
                             {
@@ -327,7 +327,7 @@ namespace Chummer
                         }
 
                         string strFilter = objFilter.Length > 0 ? '[' + objFilter.ToString() + ']' : string.Empty;
-                        using (XmlNodeList xmlSkillList = XmlManager.Load("skills.xml", GlobalOptions.Language).SelectNodes("/chummer/knowledgeskills/skill" + strFilter))
+                        using (XmlNodeList xmlSkillList = XmlManager.Load("skills.xml", _objCharacter.Options.CustomDataDictionary, GlobalOptions.Language).SelectNodes("/chummer/knowledgeskills/skill" + strFilter))
                         {
                             if (xmlSkillList?.Count > 0)
                             {
@@ -417,7 +417,7 @@ namespace Chummer
 
                     if (frmPickPower.DialogResult == DialogResult.OK)
                     {
-                        txtSelect.Text = XmlManager.Load("powers.xml").SelectSingleNode("/chummer/powers/power[id = \"" + frmPickPower.SelectedPower + "\"]/name")?.InnerText;
+                        txtSelect.Text = XmlManager.Load("powers.xml", _objCharacter.Options.CustomDataDictionary).SelectSingleNode("/chummer/powers/power[id = \"" + frmPickPower.SelectedPower + "\"]/name")?.InnerText;
                         txtTranslateSelection.Text = TranslateField(_strSelect, frmPickPower.SelectedPower);
                     }
                     break;
@@ -549,31 +549,31 @@ namespace Chummer
                     : LanguageManager.GetString("String_Attribute" + strToTranslate + "Short", GlobalOptions.Language);
 
                 case "SelectSkill":
-                    objXmlNode = XmlManager.Load("skills.xml").SelectSingleNode("/chummer/skills/skill[name = \"" + strToTranslate + "\"]");
+                    objXmlNode = XmlManager.Load("skills.xml", _objCharacter.Options.CustomDataDictionary).SelectSingleNode("/chummer/skills/skill[name = \"" + strToTranslate + "\"]");
                     return objXmlNode.SelectSingleNode("translate")?.InnerText ?? objXmlNode.SelectSingleNode("name").InnerText;
 
                 case "SelectKnowSkill":
-                    objXmlNode = XmlManager.Load("skills.xml").SelectSingleNode("/chummer/knowledgeskills/skill[name = \"" + strToTranslate + "\"]");
+                    objXmlNode = XmlManager.Load("skills.xml", _objCharacter.Options.CustomDataDictionary).SelectSingleNode("/chummer/knowledgeskills/skill[name = \"" + strToTranslate + "\"]");
                     return objXmlNode.SelectSingleNode("translate")?.InnerText ?? objXmlNode.SelectSingleNode("name").InnerText;
 
                 case "SelectSkillCategory":
-                    objXmlNode = XmlManager.Load("skills.xml").SelectSingleNode("/chummer/categories/category[. = \"" + strToTranslate + "\"]");
+                    objXmlNode = XmlManager.Load("skills.xml", _objCharacter.Options.CustomDataDictionary).SelectSingleNode("/chummer/categories/category[. = \"" + strToTranslate + "\"]");
                     return objXmlNode.Attributes?["translate"]?.InnerText ?? objXmlNode.SelectSingleNode(".").InnerText;
 
                 case "SelectSkillGroup":
-                    objXmlNode = XmlManager.Load("skills.xml").SelectSingleNode("/chummer/skillgroups/name[. = \"" + strToTranslate + "\"]");
+                    objXmlNode = XmlManager.Load("skills.xml", _objCharacter.Options.CustomDataDictionary).SelectSingleNode("/chummer/skillgroups/name[. = \"" + strToTranslate + "\"]");
                     return objXmlNode.Attributes?["translate"]?.InnerText ?? objXmlNode.SelectSingleNode(".").InnerText;
 
                 case "SelectWeaponCategory":
-                    objXmlNode = XmlManager.Load("weapons.xml").SelectSingleNode("/chummer/categories/category[. = \"" + strToTranslate + "\"]");
+                    objXmlNode = XmlManager.Load("weapons.xml", _objCharacter.Options.CustomDataDictionary).SelectSingleNode("/chummer/categories/category[. = \"" + strToTranslate + "\"]");
                     return objXmlNode.Attributes?["translate"]?.InnerText ?? objXmlNode.SelectSingleNode(".").InnerText;
 
                 case "SelectSpellCategory":
-                    objXmlNode = XmlManager.Load("spells.xml").SelectSingleNode("/chummer/categories/category[. = \"" + strToTranslate + "\"]");
+                    objXmlNode = XmlManager.Load("spells.xml", _objCharacter.Options.CustomDataDictionary).SelectSingleNode("/chummer/categories/category[. = \"" + strToTranslate + "\"]");
                     return objXmlNode.Attributes?["translate"]?.InnerText ?? objXmlNode.SelectSingleNode(".").InnerText;
 
                 case "SelectAdeptPower":
-                    objXmlNode = XmlManager.Load("powers.xml").SelectSingleNode("/chummer/powers/power[id = \"" + strToTranslate + "\" or name = \"" + strToTranslate + "\"]");
+                    objXmlNode = XmlManager.Load("powers.xml", _objCharacter.Options.CustomDataDictionary).SelectSingleNode("/chummer/powers/power[id = \"" + strToTranslate + "\" or name = \"" + strToTranslate + "\"]");
                     return objXmlNode.SelectSingleNode("translate")?.InnerText ?? objXmlNode.SelectSingleNode("name").InnerText;
 
                 default:

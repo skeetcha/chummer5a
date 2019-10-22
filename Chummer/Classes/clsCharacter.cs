@@ -2066,7 +2066,7 @@ if (!Utils.IsUnitTest){
             xmlCharacterNavigator.TryGetDecFieldQuickly("nuyenmaxbp", ref _decNuyenMaximumBP);
             xmlCharacterNavigator.TryGetInt32FieldQuickly("maxavail", ref _intMaxAvail);
 
-            XmlDocument objXmlDocumentGameplayOptions = XmlManager.Load("gameplayoptions.xml");
+            XmlDocument objXmlDocumentGameplayOptions = XmlManager.Load("gameplayoptions.xml", Options.CustomDataDictionary);
             XmlNode xmlGameplayOption =
                 objXmlDocumentGameplayOptions.SelectSingleNode(
                     "/chummer/gameplayoptions/gameplayoption[name = \"" + GameplayOption + "\"]");
@@ -2272,7 +2272,7 @@ if (!Utils.IsUnitTest){
             Quality objLivingPersonaQuality = null;
             objXmlNodeList = objXmlCharacter.SelectNodes("qualities/quality");
             bool blnHasOldQualities = false;
-            XmlNode xmlRootQualitiesNode = XmlManager.Load("qualities.xml").SelectSingleNode("/chummer/qualities");
+            XmlNode xmlRootQualitiesNode = XmlManager.Load("qualities.xml", Options.CustomDataDictionary).SelectSingleNode("/chummer/qualities");
             foreach(XmlNode objXmlQuality in objXmlNodeList)
             {
                 if(objXmlQuality["name"] != null)
@@ -2450,7 +2450,7 @@ if (!Utils.IsUnitTest){
             if(xmlCharacterNavigator.TryGetStringFieldQuickly("stream", ref strTemp) && !string.IsNullOrEmpty(strTemp) && RESEnabled)
             {
                 // Legacy load a Technomancer tradition
-                XmlNode xmlTraditionListDataNode = XmlManager.Load("streams.xml").SelectSingleNode("/chummer/traditions");
+                XmlNode xmlTraditionListDataNode = XmlManager.Load("streams.xml", Options.CustomDataDictionary).SelectSingleNode("/chummer/traditions");
                 if(xmlTraditionListDataNode != null)
                 {
                     XmlNode xmlTraditionDataNode = xmlTraditionListDataNode.SelectSingleNode("tradition[name = \"" + strTemp + "\"]");
@@ -2495,7 +2495,7 @@ if (!Utils.IsUnitTest){
                 // Not null but doesn't have children -> legacy load a magical tradition
                 else if(xpathTraditionNavigator != null && MAGEnabled)
                 {
-                    XmlNode xmlTraditionListDataNode = XmlManager.Load("traditions.xml").SelectSingleNode("/chummer/traditions");
+                    XmlNode xmlTraditionListDataNode = XmlManager.Load("traditions.xml", Options.CustomDataDictionary).SelectSingleNode("/chummer/traditions");
                     if(xmlTraditionListDataNode != null)
                     {
                         xmlCharacterNavigator.TryGetStringFieldQuickly("tradition", ref strTemp);
@@ -3221,7 +3221,7 @@ if (!Utils.IsUnitTest){
             if(!blnFoundUnarmed)
             {
                 // Add the Unarmed Attack Weapon to the character.
-                XmlDocument objXmlWeaponDoc = XmlManager.Load("weapons.xml");
+                XmlDocument objXmlWeaponDoc = XmlManager.Load("weapons.xml", Options.CustomDataDictionary);
                 XmlNode objXmlWeapon =
                     objXmlWeaponDoc.SelectSingleNode("/chummer/weapons/weapon[name = \"Unarmed Attack\"]");
                 if(objXmlWeapon != null)
@@ -3269,7 +3269,7 @@ if (!Utils.IsUnitTest){
             // load issue where the contact multiplier was set to 0
             if(_intContactMultiplier == 0 && !string.IsNullOrEmpty(_strGameplayOption))
             {
-                XmlNode objXmlGameplayOption = XmlManager.Load("gameplayoptions.xml")
+                XmlNode objXmlGameplayOption = XmlManager.Load("gameplayoptions.xml", Options.CustomDataDictionary)
                     .SelectSingleNode("/chummer/gameplayoptions/gameplayoption[name = \"" + _strGameplayOption + "\"]");
                 if(objXmlGameplayOption != null)
                 {
@@ -3401,12 +3401,12 @@ if (!Utils.IsUnitTest){
             string strMetatype = string.Empty;
             string strMetavariant = string.Empty;
             // Get the name of the Metatype and Metavariant.
-            XmlDocument objMetatypeDoc = XmlManager.Load("metatypes.xml", strLanguageToPrint);
+            XmlDocument objMetatypeDoc = XmlManager.Load("metatypes.xml", Options.CustomDataDictionary, strLanguageToPrint);
             XmlNode objMetatypeNode =
                 objMetatypeDoc.SelectSingleNode("/chummer/metatypes/metatype[name = \"" + Metatype + "\"]");
             if(objMetatypeNode == null)
             {
-                objMetatypeDoc = XmlManager.Load("critters.xml", strLanguageToPrint);
+                objMetatypeDoc = XmlManager.Load("critters.xml", Options.CustomDataDictionary, strLanguageToPrint);
                 objMetatypeNode =
                     objMetatypeDoc.SelectSingleNode("/chummer/metatypes/metatype[name = \"" + Metatype + "\"]");
             }
@@ -4809,14 +4809,14 @@ if (!Utils.IsUnitTest){
                 case Improvement.ImprovementSource.Quality:
                     if(objImprovement.SourceName == "SEEKER_WIL")
                     {
-                        return XmlManager.Load("qualities.xml")
+                        return XmlManager.Load("qualities.xml", Options.CustomDataDictionary)
                                    .SelectSingleNode(
                                        "/chummer/qualities/quality[name = \"Cyber-Singularity Seeker\"]/translate")
                                    ?.InnerText ?? "Cyber-Singularity Seeker";
                     }
                     else if(objImprovement.SourceName.StartsWith("SEEKER"))
                     {
-                        return XmlManager.Load("qualities.xml")
+                        return XmlManager.Load("qualities.xml", Options.CustomDataDictionary)
                                    .SelectSingleNode("/chummer/qualities/quality[name = \"Redliner\"]/translate")
                                    ?.InnerText ?? "Redliner";
                     }
@@ -4916,7 +4916,7 @@ if (!Utils.IsUnitTest){
                 strXPath = "/chummer/grades/grade";
 
             using(XmlNodeList xmlGradeList = XmlManager
-                .Load(objSource == Improvement.ImprovementSource.Bioware ? "bioware.xml" : objSource == Improvement.ImprovementSource.Drug ? "drugcomponents.xml" : "cyberware.xml")
+                .Load(objSource == Improvement.ImprovementSource.Bioware ? "bioware.xml" : objSource == Improvement.ImprovementSource.Drug ? "drugcomponents.xml" : "cyberware.xml", Options.CustomDataDictionary)
                 .SelectNodes(strXPath))
                 if(xmlGradeList != null)
                     foreach(XmlNode objNode in xmlGradeList)
@@ -7494,7 +7494,7 @@ if (!Utils.IsUnitTest){
                         }
                         else
                         {
-                            XmlNode xmlTraditionListDataNode = XmlManager.Load("streams.xml").SelectSingleNode("/chummer/traditions");
+                            XmlNode xmlTraditionListDataNode = XmlManager.Load("streams.xml", Options.CustomDataDictionary).SelectSingleNode("/chummer/traditions");
                             if(xmlTraditionListDataNode != null)
                             {
                                 XmlNode xmlTraditionDataNode = xmlTraditionListDataNode.SelectSingleNode("tradition[name = \"Default\"]");
@@ -7692,7 +7692,7 @@ if (!Utils.IsUnitTest){
                                 EssenceAtSpecialStart = ESS.MetatypeMaximum;
                         }
 
-                        XmlNode xmlTraditionListDataNode = XmlManager.Load("streams.xml").SelectSingleNode("/chummer/traditions");
+                        XmlNode xmlTraditionListDataNode = XmlManager.Load("streams.xml", Options.CustomDataDictionary).SelectSingleNode("/chummer/traditions");
                         if(xmlTraditionListDataNode != null)
                         {
                             XmlNode xmlTraditionDataNode = xmlTraditionListDataNode.SelectSingleNode("tradition[name = \"Default\"]");
@@ -7721,7 +7721,7 @@ if (!Utils.IsUnitTest){
                         }
                         else
                         {
-                            XmlNode xmlTraditionListDataNode = XmlManager.Load("traditions.xml").SelectSingleNode("/chummer/traditions");
+                            XmlNode xmlTraditionListDataNode = XmlManager.Load("traditions.xml", Options.CustomDataDictionary).SelectSingleNode("/chummer/traditions");
                             if(xmlTraditionListDataNode != null)
                             {
                                 XmlNode xmlTraditionDataNode = xmlTraditionListDataNode.SelectSingleNode("tradition[id = \"" + Tradition.CustomMagicalTraditionGuid + "\"]");
@@ -8033,7 +8033,7 @@ if (!Utils.IsUnitTest){
                 Cyberware objHole = Cyberware.FirstOrDefault(x => x.SourceID == Backend.Equipment.Cyberware.EssenceHoleGUID);
                 if(objHole == null)
                 {
-                    XmlNode xmlEssHole = XmlManager.Load("cyberware.xml").SelectSingleNode("/chummer/cyberwares/cyberware[id = \"" + Backend.Equipment.Cyberware.EssenceHoleGUID + "\"]");
+                    XmlNode xmlEssHole = XmlManager.Load("cyberware.xml", Options.CustomDataDictionary).SelectSingleNode("/chummer/cyberwares/cyberware[id = \"" + Backend.Equipment.Cyberware.EssenceHoleGUID + "\"]");
                     objHole = new Cyberware(this);
                     List<Weapon> lstWeapons = new List<Weapon>();
                     List<Vehicle> lstVehicles = new List<Vehicle>();
@@ -8091,7 +8091,7 @@ if (!Utils.IsUnitTest){
                 Cyberware objAntiHole = Cyberware.FirstOrDefault(x => x.SourceID == Backend.Equipment.Cyberware.EssenceAntiHoleGUID);
                 if(objAntiHole == null)
                 {
-                    XmlNode xmlEssAntiHole = XmlManager.Load("cyberware.xml").SelectSingleNode("/chummer/cyberwares/cyberware[id = \"" + Backend.Equipment.Cyberware.EssenceAntiHoleGUID + "\"]");
+                    XmlNode xmlEssAntiHole = XmlManager.Load("cyberware.xml", Options.CustomDataDictionary).SelectSingleNode("/chummer/cyberwares/cyberware[id = \"" + Backend.Equipment.Cyberware.EssenceAntiHoleGUID + "\"]");
                     objAntiHole = new Cyberware(this);
                     List<Weapon> lstWeapons = new List<Weapon>();
                     List<Vehicle> lstVehicles = new List<Vehicle>();
@@ -9220,7 +9220,7 @@ if (!Utils.IsUnitTest){
                             ?.DisplayNameShort(GlobalOptions.Language);
                         if(string.IsNullOrEmpty(strErasedString))
                         {
-                            XmlNode xmlErasedQuality = XmlManager.Load("qualities.xml")
+                            XmlNode xmlErasedQuality = XmlManager.Load("qualities.xml", Options.CustomDataDictionary)
                                 .SelectSingleNode("chummer/qualities/quality[name = \"Erased\"]");
                             if(xmlErasedQuality != null)
                             {
@@ -11585,7 +11585,7 @@ if (!Utils.IsUnitTest){
                 if(string.IsNullOrWhiteSpace(_strMovement))
                 {
                     XmlNode xmlMetatypeNode = XmlManager
-                        .Load(IsCritter ? "critters.xml" : "metatypes.xml", GlobalOptions.Language)
+                        .Load(IsCritter ? "critters.xml" : "metatypes.xml", Options.CustomDataDictionary, GlobalOptions.Language)
                         .SelectSingleNode("/chummer/metatypes/metatype[name = \"" + Metatype + "\"]");
                     XmlNode xmlMetavariantNode =
                         xmlMetatypeNode?.SelectSingleNode("metavariants/metavariant[name = \"" + Metavariant + "\"]");
@@ -11615,7 +11615,7 @@ if (!Utils.IsUnitTest){
                 if(string.IsNullOrWhiteSpace(_strRun))
                 {
                     XmlNode xmlMetatypeNode = XmlManager
-                        .Load(IsCritter ? "critters.xml" : "metatypes.xml", GlobalOptions.Language)
+                        .Load(IsCritter ? "critters.xml" : "metatypes.xml", Options.CustomDataDictionary, GlobalOptions.Language)
                         .SelectSingleNode("/chummer/metatypes/metatype[name = \"" + Metatype + "\"]");
                     XmlNode xmlMetavariantNode =
                         xmlMetatypeNode?.SelectSingleNode("metavariants/metavariant[name = \"" + Metavariant + "\"]");
@@ -11645,7 +11645,7 @@ if (!Utils.IsUnitTest){
                 if(string.IsNullOrWhiteSpace(_strRunAlt))
                 {
                     XmlNode xmlMetatypeNode = XmlManager
-                        .Load(IsCritter ? "critters.xml" : "metatypes.xml", GlobalOptions.Language)
+                        .Load(IsCritter ? "critters.xml" : "metatypes.xml", Options.CustomDataDictionary, GlobalOptions.Language)
                         .SelectSingleNode("/chummer/metatypes/metatype[name = \"" + Metatype + "\"]");
                     XmlNode xmlMetavariantNode =
                         xmlMetatypeNode?.SelectSingleNode("metavariants/metavariant[name = \"" + Metavariant + "\"]");
@@ -11675,7 +11675,7 @@ if (!Utils.IsUnitTest){
                 if(string.IsNullOrWhiteSpace(_strWalk))
                 {
                     XmlNode xmlMetatypeNode = XmlManager
-                        .Load(IsCritter ? "critters.xml" : "metatypes.xml", GlobalOptions.Language)
+                        .Load(IsCritter ? "critters.xml" : "metatypes.xml", Options.CustomDataDictionary, GlobalOptions.Language)
                         .SelectSingleNode("/chummer/metatypes/metatype[name = \"" + Metatype + "\"]");
                     XmlNode xmlMetavariantNode =
                         xmlMetatypeNode?.SelectSingleNode("metavariants/metavariant[name = \"" + Metavariant + "\"]");
@@ -11705,7 +11705,7 @@ if (!Utils.IsUnitTest){
                 if(string.IsNullOrWhiteSpace(_strWalkAlt))
                 {
                     XmlNode xmlMetatypeNode = XmlManager
-                        .Load(IsCritter ? "critters.xml" : "metatypes.xml", GlobalOptions.Language)
+                        .Load(IsCritter ? "critters.xml" : "metatypes.xml", Options.CustomDataDictionary, GlobalOptions.Language)
                         .SelectSingleNode("/chummer/metatypes/metatype[name = \"" + Metatype + "\"]");
                     XmlNode xmlMetavariantNode =
                         xmlMetatypeNode?.SelectSingleNode("metavariants/metavariant[name = \"" + Metavariant + "\"]");
@@ -11735,7 +11735,7 @@ if (!Utils.IsUnitTest){
                 if(string.IsNullOrWhiteSpace(_strSprint))
                 {
                     XmlNode xmlMetatypeNode = XmlManager
-                        .Load(IsCritter ? "critters.xml" : "metatypes.xml", GlobalOptions.Language)
+                        .Load(IsCritter ? "critters.xml" : "metatypes.xml", Options.CustomDataDictionary, GlobalOptions.Language)
                         .SelectSingleNode("/chummer/metatypes/metatype[name = \"" + Metatype + "\"]");
                     XmlNode xmlMetavariantNode =
                         xmlMetatypeNode?.SelectSingleNode("metavariants/metavariant[name = \"" + Metavariant + "\"]");
@@ -11765,7 +11765,7 @@ if (!Utils.IsUnitTest){
                 if(string.IsNullOrWhiteSpace(_strSprintAlt))
                 {
                     XmlNode xmlMetatypeNode = XmlManager
-                        .Load(IsCritter ? "critters.xml" : "metatypes.xml", GlobalOptions.Language)
+                        .Load(IsCritter ? "critters.xml" : "metatypes.xml", Options.CustomDataDictionary, GlobalOptions.Language)
                         .SelectSingleNode("/chummer/metatypes/metatype[name = \"" + Metatype + "\"]");
                     XmlNode xmlMetavariantNode =
                         xmlMetatypeNode?.SelectSingleNode("metavariants/metavariant[name = \"" + Metavariant + "\"]");
@@ -12579,7 +12579,7 @@ if (!Utils.IsUnitTest){
         /// </summary>
         private void ConvertOldQualities(XmlNodeList objXmlQualityList)
         {
-            XmlNode xmlRootQualitiesNode = XmlManager.Load("qualities.xml").SelectSingleNode("/chummer/qualities");
+            XmlNode xmlRootQualitiesNode = XmlManager.Load("qualities.xml", Options.CustomDataDictionary).SelectSingleNode("/chummer/qualities");
 
             if(xmlRootQualitiesNode != null)
             {
@@ -12622,8 +12622,8 @@ if (!Utils.IsUnitTest){
 
                 // Take care of the Metatype information.
                 string strXPath = "/chummer/metatypes/metatype[name = \"" + _strMetatype + "\"]";
-                XmlNode objXmlMetatype = XmlManager.Load("metatypes.xml").SelectSingleNode(strXPath) ??
-                                         XmlManager.Load("critters.xml").SelectSingleNode(strXPath);
+                XmlNode objXmlMetatype = XmlManager.Load("metatypes.xml", Options.CustomDataDictionary).SelectSingleNode(strXPath) ??
+                                         XmlManager.Load("critters.xml", Options.CustomDataDictionary).SelectSingleNode(strXPath);
 
                 if(objXmlMetatype != null)
                 {
@@ -13311,12 +13311,12 @@ if (!Utils.IsUnitTest){
         /// </summary>
         /// <param name="strInput"></param>
         /// <param name="strLanguage">Language to fetch</param>
-        public static string TranslatedBookList(string strInput, string strLanguage)
+        public string TranslatedBookList(string strInput, string strLanguage)
         {
             StringBuilder strReturn = new StringBuilder();
             string[] strArray = strInput.TrimEndOnce(';').Split(';');
             // Load the Sourcebook information.
-            XmlDocument objXmlDocument = XmlManager.Load("books.xml", strLanguage);
+            XmlDocument objXmlDocument = XmlManager.Load("books.xml", Options.CustomDataDictionary, strLanguage);
 
             foreach(string strBook in strArray)
             {
@@ -14641,7 +14641,7 @@ if (!Utils.IsUnitTest){
             {
                 if(strRaceString == "Metasapient")
                     strRaceString = "A.I.";
-                foreach(XmlNode xmlMetatype in XmlManager.Load("metatypes.xml").SelectNodes("/chummer/metatypes/metatype"))
+                foreach(XmlNode xmlMetatype in XmlManager.Load("metatypes.xml", Options.CustomDataDictionary).SelectNodes("/chummer/metatypes/metatype"))
                 {
                     string strMetatypeName = xmlMetatype["name"].InnerText;
                     if(strMetatypeName == strRaceString)
@@ -14796,7 +14796,7 @@ if (!Utils.IsUnitTest){
                     _objBuildMethod = CharacterBuildMethod.Priority;
             }
 
-            XmlDocument xmlDocumentGameplayOptions = XmlManager.Load("gameplayoptions.xml");
+            XmlDocument xmlDocumentGameplayOptions = XmlManager.Load("gameplayoptions.xml", Options.CustomDataDictionary);
             XmlNode xmlGameplayOption = xmlDocumentGameplayOptions.SelectSingleNode("/chummer/gameplayoptions/gameplayoption[name = \"" + GameplayOption + "\"]");
             if(xmlGameplayOption == null)
             {
@@ -14917,7 +14917,7 @@ if (!Utils.IsUnitTest){
             Timekeeper.Start("load_char_quality");
 
             // Qualities
-            XmlDocument xmlQualitiesDocument = XmlManager.Load("qualities.xml");
+            XmlDocument xmlQualitiesDocument = XmlManager.Load("qualities.xml", Options.CustomDataDictionary);
             foreach(XmlNode xmlQualityToImport in xmlStatBlockBaseNode.SelectNodes("qualities/positive/quality[traitcost/@bp != \"0\"]"))
             {
                 string strQualityName = xmlQualityToImport.Attributes["name"]?.InnerText;
@@ -15232,8 +15232,8 @@ if (!Utils.IsUnitTest){
             Timekeeper.Start("load_char_armor");
 
             // Armor.
-            XmlDocument xmlGearDocument = XmlManager.Load("gear.xml");
-            XmlDocument xmlArmorDocument = XmlManager.Load("armor.xml");
+            XmlDocument xmlGearDocument = XmlManager.Load("gear.xml", Options.CustomDataDictionary);
+            XmlDocument xmlArmorDocument = XmlManager.Load("armor.xml", Options.CustomDataDictionary);
             foreach(XmlNode xmlArmorToImport in xmlStatBlockBaseNode.SelectNodes("gear/armor/item[@useradded != \"no\"]"))
             {
                 string strArmorName = xmlArmorToImport.Attributes["name"]?.InnerText;
@@ -15434,7 +15434,7 @@ if (!Utils.IsUnitTest){
 
             // Spells.
             XmlNodeList xmlNodeList = xmlStatBlockBaseNode.SelectNodes("magic/spells/spell");
-            XmlDocument xmlSpellDocument = XmlManager.Load("spells.xml");
+            XmlDocument xmlSpellDocument = XmlManager.Load("spells.xml", Options.CustomDataDictionary);
             foreach(XmlNode xmlHeroLabSpell in xmlNodeList)
             {
                 string strSpellName = xmlHeroLabSpell.Attributes["name"]?.InnerText;
@@ -15683,7 +15683,7 @@ if (!Utils.IsUnitTest){
 
             // Powers.
             xmlNodeList = xmlStatBlockBaseNode.SelectNodes("magic/adeptpowers/adeptpower");
-            XmlDocument xmlPowersDocument = XmlManager.Load("powers.xml");
+            XmlDocument xmlPowersDocument = XmlManager.Load("powers.xml", Options.CustomDataDictionary);
             foreach(XmlNode xmlHeroLabPower in xmlNodeList)
             {
                 string strPowerName = xmlHeroLabPower.Attributes["name"]?.InnerText;
@@ -15764,7 +15764,7 @@ if (!Utils.IsUnitTest){
             string strComplexFormsLine = lstTextStatBlockLines?.FirstOrDefault(x => x.StartsWith("Complex Forms:"));
             if(!string.IsNullOrEmpty(strComplexFormsLine))
             {
-                XmlDocument xmlComplexFormsDocument = XmlManager.Load("complexforms.xml");
+                XmlDocument xmlComplexFormsDocument = XmlManager.Load("complexforms.xml", Options.CustomDataDictionary);
 
                 string[] astrComplexForms = strComplexFormsLine.TrimStartOnce("Complex Forms:").Trim().Split(',');
                 foreach(string strComplexFormEntry in astrComplexForms)
@@ -15898,7 +15898,7 @@ if (!Utils.IsUnitTest){
                 {
                     string strLifestyleType = xmlHeroLabLifestyleNode.Attributes["name"]?.InnerText.TrimEndOnce(" Lifestyle");
 
-                    XmlNode xmlLifestyleDataNode = XmlManager.Load("lifestyles.xml").SelectSingleNode("/chummer/lifestyles/lifestyle[name = \"" + strLifestyleType + "\"]");
+                    XmlNode xmlLifestyleDataNode = XmlManager.Load("lifestyles.xml", Options.CustomDataDictionary).SelectSingleNode("/chummer/lifestyles/lifestyle[name = \"" + strLifestyleType + "\"]");
 
                     if(xmlLifestyleDataNode != null)
                     {
@@ -16061,7 +16061,7 @@ if (!Utils.IsUnitTest){
             if(!blnFoundUnarmed)
             {
                 // Add the Unarmed Attack Weapon to the character.
-                XmlDocument objXmlWeaponDoc = XmlManager.Load("weapons.xml");
+                XmlDocument objXmlWeaponDoc = XmlManager.Load("weapons.xml", Options.CustomDataDictionary);
                 XmlNode objXmlWeapon = objXmlWeaponDoc.SelectSingleNode("/chummer/weapons/weapon[name = \"Unarmed Attack\"]");
                 if(objXmlWeapon != null)
                 {
@@ -16078,7 +16078,7 @@ if (!Utils.IsUnitTest){
             // load issue where the contact multiplier was set to 0
             if(_intContactMultiplier == 0 && !string.IsNullOrEmpty(_strGameplayOption))
             {
-                XmlNode objXmlGameplayOption = XmlManager.Load("gameplayoptions.xml")
+                XmlNode objXmlGameplayOption = XmlManager.Load("gameplayoptions.xml", Options.CustomDataDictionary)
                     .SelectSingleNode("/chummer/gameplayoptions/gameplayoption[name = \"" + _strGameplayOption + "\"]");
                 if(objXmlGameplayOption != null)
                 {

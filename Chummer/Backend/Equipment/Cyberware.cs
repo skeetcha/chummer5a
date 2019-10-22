@@ -475,7 +475,7 @@ namespace Chummer.Backend.Equipment
             }
 
             // Add Cyberweapons if applicable.
-            XmlDocument objXmlWeaponDocument = XmlManager.Load("weapons.xml");
+            XmlDocument objXmlWeaponDocument = XmlManager.Load("weapons.xml", _objCharacter.Options.CustomDataDictionary);
 
             // More than one Weapon can be added, so loop through all occurrences.
             foreach (XmlNode objXmlAddWeapon in objXmlCyberware.SelectNodes("addweapon"))
@@ -501,7 +501,7 @@ namespace Chummer.Backend.Equipment
             }
 
             // Add Drone Bodyparts if applicable.
-            XmlDocument objXmlVehicleDocument = XmlManager.Load("vehicles.xml");
+            XmlDocument objXmlVehicleDocument = XmlManager.Load("vehicles.xml", _objCharacter.Options.CustomDataDictionary);
 
             // More than one Weapon can be added, so loop through all occurrences.
             foreach (XmlNode xmlAddVehicle in objXmlCyberware.SelectNodes("addvehicle"))
@@ -691,7 +691,7 @@ namespace Chummer.Backend.Equipment
                 using (XmlNodeList objXmlSubSystemNameList = xmlSubsystemsNode.SelectNodes("cyberware"))
                     if (objXmlSubSystemNameList?.Count > 0)
                     {
-                        XmlDocument objXmlDocument = XmlManager.Load("cyberware.xml");
+                        XmlDocument objXmlDocument = XmlManager.Load("cyberware.xml", _objCharacter.Options.CustomDataDictionary);
                         foreach (XmlNode objXmlSubsystemNode in objXmlSubSystemNameList)
                         {
                             XmlNode objXmlSubsystem = objXmlDocument.SelectSingleNode("/chummer/cyberwares/cyberware[name = \"" + objXmlSubsystemNode["name"]?.InnerText + "\"]");
@@ -716,7 +716,7 @@ namespace Chummer.Backend.Equipment
                 using (XmlNodeList objXmlSubSystemNameList = xmlSubsystemsNode.SelectNodes("bioware"))
                     if (objXmlSubSystemNameList?.Count > 0)
                     {
-                        XmlDocument objXmlDocument = XmlManager.Load("bioware.xml");
+                        XmlDocument objXmlDocument = XmlManager.Load("bioware.xml", _objCharacter.Options.CustomDataDictionary);
                         foreach (XmlNode objXmlSubsystemNode in objXmlSubSystemNameList)
                         {
                             XmlNode objXmlSubsystem = objXmlDocument.SelectSingleNode("/chummer/biowares/bioware[name = \"" + objXmlSubsystemNode["name"]?.InnerText + "\"]");
@@ -741,7 +741,7 @@ namespace Chummer.Backend.Equipment
             // Check to see if there are any child elements.
             if (objParentNode["gears"] != null)
             {
-                XmlDocument objXmlGearDocument = XmlManager.Load("gear.xml");
+                XmlDocument objXmlGearDocument = XmlManager.Load("gear.xml", _objCharacter.Options.CustomDataDictionary);
 
                 XmlNodeList objXmlGearList = objParentNode["gears"].SelectNodes("usegear");
                 if (objXmlGearList?.Count > 0)
@@ -922,8 +922,8 @@ namespace Chummer.Backend.Equipment
             {
                 // This step is needed in case there's a custom data file that has the name "Reflex Recorder (Skill)", in which case we wouldn't want to rename the 'ware
                 XmlNode xmlReflexRecorderNode = _objImprovementSource == Improvement.ImprovementSource.Bioware
-                    ? XmlManager.Load("bioware.xml").SelectSingleNode("/chummer/biowares/bioware[name = \"Reflex Recorder (Skill)\"]")
-                    : XmlManager.Load("cyberware.xml").SelectSingleNode("/chummer/cyberwares/cyberware[name = \"Reflex Recorder (Skill)\"]");
+                    ? XmlManager.Load("bioware.xml", _objCharacter.Options.CustomDataDictionary).SelectSingleNode("/chummer/biowares/bioware[name = \"Reflex Recorder (Skill)\"]")
+                    : XmlManager.Load("cyberware.xml", _objCharacter.Options.CustomDataDictionary).SelectSingleNode("/chummer/cyberwares/cyberware[name = \"Reflex Recorder (Skill)\"]");
                 if (xmlReflexRecorderNode == null)
                     _strName = "Reflex Recorder";
             }
@@ -1500,7 +1500,7 @@ namespace Chummer.Backend.Equipment
             if (strLanguage == GlobalOptions.DefaultLanguage)
                 return Category;
 
-            return XmlManager.Load(SourceType == Improvement.ImprovementSource.Cyberware ? "cyberware.xml" : "bioware.xml", strLanguage).SelectSingleNode("/chummer/categories/category[. = \"" + Category + "\"]/@translate")?.InnerText ?? Category;
+            return XmlManager.Load(SourceType == Improvement.ImprovementSource.Cyberware ? "cyberware.xml" : "bioware.xml", _objCharacter.Options.CustomDataDictionary, strLanguage).SelectSingleNode("/chummer/categories/category[. = \"" + Category + "\"]/@translate")?.InnerText ?? Category;
         }
 
         /// <summary>
@@ -2472,7 +2472,7 @@ namespace Chummer.Backend.Equipment
             XmlDocument objDoc;
             if (_objImprovementSource == Improvement.ImprovementSource.Bioware)
             {
-                objDoc = XmlManager.Load("bioware.xml", strLanguage);
+                objDoc = XmlManager.Load("bioware.xml", _objCharacter.Options.CustomDataDictionary, strLanguage);
                 _objCachedMyXmlNode = objDoc.SelectSingleNode("/chummer/biowares/bioware[id = \"" + strGuid + "\" or id = \"" + strGuid.ToUpperInvariant() + "\"]");
                 if (_objCachedMyXmlNode == null)
                 {
@@ -2482,7 +2482,7 @@ namespace Chummer.Backend.Equipment
             }
             else
             {
-                objDoc = XmlManager.Load("cyberware.xml", strLanguage);
+                objDoc = XmlManager.Load("cyberware.xml", _objCharacter.Options.CustomDataDictionary, strLanguage);
                 _objCachedMyXmlNode = objDoc.SelectSingleNode("/chummer/cyberwares/cyberware[id = \"" + strGuid + "\" or id = \"" + strGuid.ToUpperInvariant() + "\"]");
                 if (_objCachedMyXmlNode == null)
                 {
@@ -3901,8 +3901,8 @@ namespace Chummer.Backend.Equipment
                     }
                     EndGradeCheck:;
                 }
-                XmlDocument xmlCyberwareDocument = XmlManager.Load("cyberware.xml");
-                XmlDocument xmlBiowareDocument = XmlManager.Load("bioware.xml");
+                XmlDocument xmlCyberwareDocument = XmlManager.Load("cyberware.xml", _objCharacter.Options.CustomDataDictionary);
+                XmlDocument xmlBiowareDocument = XmlManager.Load("bioware.xml", _objCharacter.Options.CustomDataDictionary);
                 string strForceValue = string.Empty;
                 XmlNode xmlCyberwareDataNode = null;
                 XmlNodeList xmlCyberwareNodeList = xmlCyberwareDocument.SelectNodes("/chummer/cyberwares/cyberware[contains(name, \"" + strOriginalName + "\")]");

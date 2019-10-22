@@ -17,6 +17,7 @@
  *  https://github.com/chummer5a/chummer5a
  */
 using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.Xml;
 
@@ -96,10 +97,10 @@ namespace Chummer.Backend.Equipment
             if (_objCachedMyXmlNode != null && strLanguage == _strCachedXmlNodeLanguage && !GlobalOptions.LiveCustomData) return _objCachedMyXmlNode;
             _objCachedMyXmlNode = SourceID == Guid.Empty
                 ? XmlManager
-                    .Load(_eSource == Improvement.ImprovementSource.Bioware ? "bioware.xml" : "cyberware.xml",
+                    .Load(_eSource == Improvement.ImprovementSource.Bioware ? "bioware.xml" : "cyberware.xml", new Dictionary<string, bool>(),
                         strLanguage).SelectSingleNode($"/chummer/grades/grade[name = \"{Name}\"]")
                 : XmlManager
-                    .Load(_eSource == Improvement.ImprovementSource.Bioware ? "bioware.xml" : "cyberware.xml",
+                    .Load(_eSource == Improvement.ImprovementSource.Bioware ? "bioware.xml" : "cyberware.xml", new Dictionary<string, bool>(),
                         strLanguage).SelectSingleNode($"/chummer/grades/grade[id = \"{SourceIDString}\" or id = \"{SourceIDString}\"]");
 
             _strCachedXmlNodeLanguage = strLanguage;

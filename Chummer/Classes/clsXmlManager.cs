@@ -66,6 +66,7 @@ namespace Chummer
         private static readonly List<string> s_LstDataDirectories = new List<string>();
         private static readonly object s_SetFilesWithCachedDocsLock = new object();
         private static readonly HashSet<string> s_SetFilesWithCachedDocs = new HashSet<string>();
+        private static Dictionary<string,bool> s_CustomDataDictionary = new Dictionary<string, bool>();
 
         #region Constructor
         static XmlManager()
@@ -95,10 +96,11 @@ namespace Chummer
         /// Load the selected XML file and its associated custom file.
         /// </summary>
         /// <param name="strFileName">Name of the XML file to load.</param>
+        /// <param name="dicCustomBooks"></param>
         /// <param name="strLanguage">Language in which to load the data document.</param>
         /// <param name="blnLoadFile">Whether to force reloading content even if the file already exists.</param>
         [Annotations.NotNull]
-        public static XmlDocument Load(string strFileName, string strLanguage = "", bool blnLoadFile = false)
+        public static XmlDocument Load(string strFileName, Dictionary<string, bool> dicCustomBooks, string strLanguage = "", bool blnLoadFile = false)
         {
             bool blnFileFound = false;
             string strPath = string.Empty;
@@ -120,7 +122,11 @@ namespace Chummer
             lock (s_SetFilesWithCachedDocsLock)
                 if (!s_SetFilesWithCachedDocs.Contains(strFileName))
                     blnLoadFile = true;
-
+            if (!s_CustomDataDictionary.EqualsByValue(dicCustomBooks))
+            {
+                blnLoadFile = true;
+                s_CustomDataDictionary = dicCustomBooks;
+            }
             DateTime datDate = File.GetLastWriteTime(strPath);
             if (string.IsNullOrEmpty(strLanguage))
                 strLanguage = GlobalOptions.Language;
@@ -916,7 +922,8 @@ namespace Chummer
         /// </summary>
         /// <param name="strLanguage">Language to check.</param>
         /// <param name="lstBooks">List of books.</param>
-        public static void Verify(string strLanguage, List<string> lstBooks)
+        /// <param name="dicCustomData"></param>
+        public static void Verify(string strLanguage, List<string> lstBooks, Dictionary<string, bool> dicCustomData)
         {
             if (strLanguage == GlobalOptions.DefaultLanguage)
                 return;
@@ -973,7 +980,7 @@ namespace Chummer
                     !strFile.EndsWith("sheets.xml"))
                 {
                     // Load the current English file.
-                    XPathNavigator objEnglishDoc = Load(strFileName).GetFastNavigator();
+                    XPathNavigator objEnglishDoc = Load(strFileName, dicCustomData).GetFastNavigator();
                     XPathNavigator objEnglishRoot = objEnglishDoc.SelectSingleNode("/chummer");
 
                     // First pass: make sure the document exists.
