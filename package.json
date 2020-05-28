@@ -19,5 +19,8 @@
   "homepage": "https://github.com/skeetcha/chummer5a#readme",
   "devDependencies": {
     "electron": "^9.0.0"
+  },
+  "dependencies": {
+    "xml2js": "^0.4.23"
   }
 }
