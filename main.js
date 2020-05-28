@@ -1,4 +1,6 @@
-const {app, BrowserWindow, Menu} = require("electron");
+const {app, BrowserWindow, Menu, dialog} = require("electron");
+const fs = require("fs");
+const parseString = require("xml2js").parseString;
 
 function createWindow() {
     let win = new BrowserWindow({
@@ -31,7 +33,32 @@ function createWindow() {
                 {
                     label: "Open",
                     click: () => {
-                        console.log("Open not implemented yet");
+                        var file = dialog.showOpenDialogSync(
+                            {
+                                properties: ["openFile"],
+                                filters: [
+                                    {
+                                        name: "Chummer character file",
+                                        extensions: ["chum5"]
+                                    }
+                                ]
+                            }
+                        )[0];
+                        
+                        var charData = fs.readFileSync(file, "utf-8");
+                        parseString(charData, (err, result) => {
+                            if (err) {
+                                console.log("Could not open " + file + "\n" + err);
+                                return;
+                            }
+
+                            if (result.character.gameedition !== "SR5") {
+                                console.log("Incorrect game edition.");
+                                return;
+                            }
+
+                            // Parse the XML doc as JSON
+                        });
                     },
                     accelerator: "CmdOrCtrl+O"
                 },
