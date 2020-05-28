@@ -1,0 +1,23 @@
+{
+  "name": "chummer5a",
+  "version": "0.0.1",
+  "description": "A character generator and tracker for Shadowrun 5th Edition",
+  "main": "main.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "electron ."
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/skeetcha/chummer5a.git"
+  },
+  "author": "Daniel Unterholzner",
+  "license": "GPL-3.0-or-later",
+  "bugs": {
+    "url": "https://github.com/skeetcha/chummer5a/issues"
+  },
+  "homepage": "https://github.com/skeetcha/chummer5a#readme",
+  "devDependencies": {
+    "electron": "^9.0.0"
+  }
+}
