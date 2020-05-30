@@ -227,5 +227,8 @@ exports.Character = class {
                 this.armors.push(newArmor);
             }
         }
+
+        // https://github.com/chummer5a/chummer5a/blob/master/Chummer/Classes/clsCharacter.cs#L2096
+        // https://github.com/chummer5a/chummer5a/blob/master/Chummer/Backend/Equipment/Weapon.cs#L552
     }
 }
