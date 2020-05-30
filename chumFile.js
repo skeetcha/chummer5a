@@ -129,8 +129,14 @@ exports.convertChumToJSON = function(filepath) {
                 skillptsmax: parseInt(result.character.newskills[0].skillptsmax[0], 10),
                 skillgrpsmax: parseInt(result.character.newskills[0].skillgrpsmax[0], 10),
                 skills: [],
-                knoskills: []
-            }
+                knoskills: [],
+                skilljackknowledgeskills: [],
+                groups: []
+            },
+            contacts: [],
+            spells: [],
+            foci: [],
+            stackedfoci: []
         };
 
         if (result.character.ignorerules) {
@@ -203,31 +209,181 @@ exports.convertChumToJSON = function(filepath) {
             charSettings.newskills.skills.push(newSkill);
         }
 
-        for (var i = 0; i < result.characters.newskills[0].knoskills[0].skill.length; i++) {
+        for (var i = 0; i < result.character.newskills[0].knoskills[0].skill.length; i++) {
             var newKnoSkill = {
-                guid: result.characters.newskills[0].knoskills[0].skill[i].guid[0],
-                suid: result.characters.newskills[0].knoskills[0].skill[i].suid[0],
-                isknowledge: (result.characters.newskills[0].knoskills[0].skill[i].isknowledge[0].toLowerCase() === "true"),
-                skillcategory: result.characters.newskills[0].knoskills[0].skill[i].skillcategory[0],
-                karma: parseInt(result.characters.newskills[0].knowskills[0].skill[i].karma[0], 10),
-                base: parseInt(result.characters.newskills[0].knoskills[0].skill[i].base[0], 10),
-                notes: result.characters.newskills[0].knoskills[0].skill[i].notes[0]
+                guid: result.character.newskills[0].knoskills[0].skill[i].guid[0],
+                suid: result.character.newskills[0].knoskills[0].skill[i].suid[0],
+                isknowledge: (result.character.newskills[0].knoskills[0].skill[i].isknowledge[0].toLowerCase() === "true"),
+                skillcategory: result.character.newskills[0].knoskills[0].skill[i].skillcategory[0],
+                karma: parseInt(result.character.newskills[0].knoskills[0].skill[i].karma[0], 10),
+                base: parseInt(result.character.newskills[0].knoskills[0].skill[i].base[0], 10),
+                notes: result.character.newskills[0].knoskills[0].skill[i].notes[0],
+                name: result.character.newskills[0].knoskills[0].skill[i].name[0],
+                type: result.character.newskills[0].knoskills[0].skill[i].type[0]
             };
 
             if (charSettings.created) {
-                newKnoSkill.buywithkarma = (result.characters.newskills[0].knoskills[0].skill[i].buywithkarma.toLowerCase() === "true");
+                newKnoSkill.buywithkarma = (result.character.newskills[0].knoskills[0].skill[i].buywithkarma.toLowerCase() === "true");
             }
 
             if (result.character.newskills[0].knoskills[0].skill[i].specs) {
-                // https://github.com/chummer5a/chummer5a/blob/master/Chummer/Classes/clsCharacter.cs#L1967
-                // https://github.com/chummer5a/chummer5a/blob/master/Chummer/Backend/Skills/SkillsSection.cs#L766
-                // https://github.com/chummer5a/chummer5a/blob/master/Chummer/Backend/Skills/KnowledgeSkill.cs#L454
+                newKnoSkill.specs = [];
+
+                for (var j = 0; j < result.character.newskills[0].knoskills[0].skill[i].specs[0].spec.length; j++) {
+                    newKnoSkill.specs.push({
+                        guid: result.character.newskills[0].knoskills[0].skill[i].specs[0].spec[j].guid[0],
+                        name: result.character.newskills[0].knoskills[0].skill[i].specs[0].spec[j].name[0],
+                        free: result.character.newskills[0].knoskills[0].skill[i].specs[0].spec[j].free[0]
+                    });
+                }
+            }
+
+            if (result.character.newskills[0].knoskills[0].skill[i].forced) {
+                newKnoSkill.forced = result.character.newskills[0].knoskills[0].skill[i].forced[0];
             }
 
             charSettings.newskills.knoskills.push(newKnoSkill);
         }
 
-        /*fs.writeFile("D:\\Desktop\\output.json", JSON.stringify(result, null, 4), (err) => {
+        if (result.character.newskills[0].skilljackknowledgeskills[0].skill) {
+            for (var i = 0; i < result.character.newskills[0].skilljackknowledgeskills[0].skill.length; i++) {
+                var newKnoSkill = {
+                    guid: result.character.newskills[0].skilljackknowledgeskills[0].skill[i].guid[0],
+                    suid: result.character.newskills[0].skilljackknowledgeskills[0].skill[i].suid[0],
+                    isknowledge: (result.character.newskills[0].skilljackknowledgeskills[0].skill[i].isknowledge[0].toLowerCase() === "true"),
+                    skillcategory: result.character.newskills[0].skilljackknowledgeskills[0].skill[i].skillcategory[0],
+                    karma: parseInt(result.character.newskills[0].skilljackknowledgeskills[0].skill[i].karma[0], 10),
+                    base: parseInt(result.character.newskills[0].skilljackknowledgeskills[0].skill[i].base[0], 10),
+                    notes: result.character.newskills[0].skilljackknowledgeskills[0].skill[i].notes[0],
+                    name: result.character.newskills[0].skilljackknowledgeskills[0].skill[i].name[0],
+                    type: result.character.newskills[0].skilljackknowledgeskills[0].skill[i].type[0]
+                };
+
+                if (charSettings.created) {
+                    newKnoSkill.buywithkarma = (result.character.newskills[0].skilljackknowledgeskills[0].skill[i].buywithkarma.toLowerCase() === "true");
+                }
+
+                if (result.character.newskills[0].skilljackknowledgeskills[0].skill[i].specs) {
+                    newKnoSkill.specs = [];
+
+                    for (var j = 0; j < result.character.newskills[0].skilljackknowledgeskills[0].skill[i].specs[0].spec.length; j++) {
+                        newKnoSkill.specs.push({
+                            guid: result.character.newskills[0].skilljackknowledgeskills[0].skill[i].specs[0].spec[j].guid[0],
+                            name: result.character.newskills[0].skilljackknowledgeskills[0].skill[i].specs[0].spec[j].name[0],
+                            free: result.character.newskills[0].skilljackknowledgeskills[0].skill[i].specs[0].spec[j].free[0]
+                        });
+                    }
+                }
+
+                if (result.character.newskills[0].skilljackknowledgeskills[0].skill[i].forced) {
+                    newKnoSkill.forced = result.character.newskills[0].skilljackknowledgeskills[0].skill[i].forced[0];
+                }
+
+                charSettings.newskills.skilljackknowledgeskills.push(newKnoSkill);
+            }
+        }
+
+        for (var i = 0; i < result.character.newskills[0].groups[0].group.length; i++) {
+            charSettings.newskills.groups.push({
+                karma: parseInt(result.character.newskills[0].groups[0].group[j].karma[0], 10),
+                base: parseInt(result.character.newskills[0].groups[0].group[j].base[0], 10),
+                id: result.character.newskills[0].groups[0].group[i].id[0],
+                name: result.character.newskills[0].groups[0].group[i].name[0]
+            });
+        }
+
+        if (result.character.contacts[0].contact) {
+            for (var i = 0; i < result.character.contacts[0].contact.length; i++) {
+                var newContact = {
+                    name: result.character.contacts[0].contact[i].name[0],
+                    role: result.character.contacts[0].contact[i].role[0],
+                    location: result.character.contacts[0].contact[i].location[0],
+                    connection: parseInt(result.character.contacts[0].contact[i].connection[0], 10),
+                    loyalty: parseInt(result.character.contacts[0].contact[i].loyalty[0], 10),
+                    metatype: result.character.contacts[0].contact[i].metatype[0],
+                    sex: result.character.contacts[0].contact[i].sex[0],
+                    age: result.character.contacts[0].contact[i].age[0],
+                    contacttype: result.character.contacts[0].contact[i].contacttype[0],
+                    preferredpayment: result.character.contacts[0].contact[i].preferredpayment[0],
+                    hobbiesvice: result.character.contacts[0].contact[i].hobbiesvice[0],
+                    personallife: result.character.contacts[0].contact[i].personallife[0],
+                    type: result.character.contacts[0].contact[i].type[0],
+                    file: result.character.contacts[0].contact[i].file[0],
+                    relative: result.character.contacts[0].contact[i].relative[0],
+                    notes: result.character.contacts[0].contact[i].notes[0],
+                    groupname: result.character.contacts[0].contact[i].groupname[0],
+                    colour: result.character.contacts[0].contact[i].colour[0],
+                    group: (result.character.contacts[0].contact[i].group[0].toLowerCase() === "true"),
+                    family: (result.character.contacts[0].contact[i].family[0].toLowerCase() === "true"),
+                    blackmail: (result.character.contacts[0].contact[i].blackmail[0].toLowerCase() === "true"),
+                    free: (result.character.contacts[0].contact[i].free[0].toLowerCase() === "true"),
+                    groupenabled: (result.character.contacts[0].contact[i].groupenabled[0].toLowerCase() === "true"),
+                    mainmugshotindex: parseInt(result.character.contacts[0].contact[i].mainmugshotindex[0], 10),
+                    mugshots: []
+                };
+
+                if (result.character.contacts[0].contact[i].readonly) {
+                    newContact.readonly = (result.character.contacts[0].contact[i].readonly[0].toLowerCase() === "true");
+                }
+
+                if (result.character.contacts[0].contact[i].guid) {
+                    newContact.guid = result.character.contacts[0].contact[i].guid[0];
+                }
+
+                if (result.character.contacts[0].contact[i].mugshots[0].mugshot) {
+                    for (var j = 0; j < result.character.contacts[0].contact[i].mugshots[0].mugshot.length; j++) {
+                        newContact.mugshots.push(result.character.contacts[0].contact[i].mugshots[0].mugshot[j]);
+                    }
+                }
+
+                charSettings.contacts.push(newContact);
+            }
+        }
+
+        if (result.character.spells[0].spell) {
+            for (var i = 0; i < result.character.spells[0].spell.length; i++) {
+                charSettings.spells.push({
+                    sourceid: result.character.spells[0].spell[i].sourceid[0],
+                    guid: result.character.spells[0].spell[i].guid[0],
+                    name: result.character.spells[0].spell[i].name[0],
+                    descriptors: result.character.spells[0].spell[i].descriptors[0],
+                    category: result.character.spells[0].spell[i].category[0],
+                    type: result.character.spells[0].spell[i].type[0],
+                    range: result.character.spells[0].spell[i].range[0],
+                    damage: result.character.spells[0].spell[i].damage[0],
+                    duration: result.character.spells[0].spell[i].duration[0],
+                    dv: result.character.spells[0].spell[i].dv[0],
+                    limited: (result.character.spells[0].spell[i].limited[0].toLowerCase() === "true"),
+                    extended: (result.character.spells[0].spell[i].extended[0].toLowerCase() === "true"),
+                    alchemical: (result.character.spells[0].spell[i].alchemical[0].toLowerCase() === "true"),
+                    source: result.character.spells[0].spell[i].source[0],
+                    page: result.character.spells[0].spell[i].page[0],
+                    extra: result.character.spells[0].spell[i].extra[0],
+                    notes: result.character.spells[0].spell[i].notes[0],
+                    freebonus: (result.character.spells[0].spell[i].freebonus[0].toLowerCase() === "true"),
+                    usesunarmed: (result.character.spells[0].spell[i].usesunarmed[0].toLowerCase() === "true"),
+                    improvementsource: result.character.spells[0].spell[i].improvementsource[0],
+                    grade: parseInt(result.character.spells[0].spell[i].grade[0], 10)
+                });
+            }
+        }
+
+        if (result.character.foci[0].focus) {
+            for (var i = 0; i < result.character.foci[0].focus.length; i++) {
+                charSettings.foci.push({
+                    guid: result.character.foci[0].focus[i].guid[0],
+                    gearid: result.character.foci[0].focus[i].gearid[0]
+                });
+            }
+        }
+
+        if (result.character.stackedfoci[0].stackedfocus) {
+            for (var i = 0; i < result.character.stackedfoci[0].stackedfocus.length; i++) {
+                
+            }
+        }
+
+        /*fs.writeFile("C:\\Users\\piano\\Desktop\\output.json", JSON.stringify(result, null, 4), (err) => {
             if (err) {
                 console.log(err);
                 return;
