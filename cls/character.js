@@ -10,6 +10,7 @@ const ComplexForm = require("./complexform.js").ComplexForm;
 const AIProgram = require("./aiprogram.js").AIProgram;
 const MartialArt = require("./martialart.js").MartialArt;
 const LimitModifier = require("./limitmodifier.js").LimitModifier;
+const Armor = require("./armor.js").Armor;
 
 exports.Character = class {
     constructor() {
@@ -214,6 +215,16 @@ exports.Character = class {
                 var newLM = LimitModifier();
                 newLM.load(cobj.limitmodifiers[0].limitmodifier[i]);
                 this.limitmodifiers.push(newLM);
+            }
+        }
+
+        this.armors = [];
+
+        if (cobj.armors[0].armor) {
+            for (var i = 0; i < cobj.armors[0].armor.length; i++) {
+                var newArmor = Armor();
+                newArmor.load(cobj.armors[0].armor[i]);
+                this.armors.push(newArmor);
             }
         }
     }
