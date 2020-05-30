@@ -9,6 +9,7 @@ const Spirit = require("./spirit.js").Spirit;
 const ComplexForm = require("./complexform.js").ComplexForm;
 const AIProgram = require("./aiprogram.js").AIProgram;
 const MartialArt = require("./martialart.js").MartialArt;
+const LimitModifier = require("./limitmodifier.js").LimitModifier;
 
 exports.Character = class {
     constructor() {
@@ -203,6 +204,16 @@ exports.Character = class {
                 var newMArt = MartialArt();
                 newMArt.load(cobj.martialarts[0].martialart[i]);
                 this.martialarts.push(newMArt);
+            }
+        }
+
+        this.limitmodifiers = [];
+
+        if (cobj.limitmodifiers[0].limitmodifier) {
+            for (var i = 0; i < cobj.limitmodifiers[0].limitmodifier.length; i++) {
+                var newLM = LimitModifier();
+                newLM.load(cobj.limitmodifiers[0].limitmodifier[i]);
+                this.limitmodifiers.push(newLM);
             }
         }
     }
