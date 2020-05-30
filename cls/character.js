@@ -6,6 +6,7 @@ const Focus = require("./focus.js").Focus;
 const StackedFocus = require("./stackedfocus.js").StackedFocus;
 const Power = require("./power.js").Power;
 const Spirit = require("./spirit.js").Spirit;
+const ComplexForm = require("./complexform.js").ComplexForm;
 
 exports.Character = class {
     constructor() {
@@ -174,5 +175,13 @@ exports.Character = class {
         }
 
         this.complexforms = [];
+
+        if (cobj.complexforms[0].complexform) {
+            for (var i = 0; i < cobj.complexforms[0].complexform.length; i++) {
+                var newCF = ComplexForm();
+                newCF.load(cobj.complexforms[0].complexform[i]);
+                this.complexforms.push(newCF);
+            }
+        }
     }
 }
