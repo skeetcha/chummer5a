@@ -8,6 +8,7 @@ const Power = require("./power.js").Power;
 const Spirit = require("./spirit.js").Spirit;
 const ComplexForm = require("./complexform.js").ComplexForm;
 const AIProgram = require("./aiprogram.js").AIProgram;
+const MartialArt = require("./martialart.js").MartialArt;
 
 exports.Character = class {
     constructor() {
@@ -192,6 +193,16 @@ exports.Character = class {
                 var newProgram = AIProgram();
                 newProgram.load(cobj.aiprograms[0].aiprogram[i]);
                 this.aiprograms.push(newProgram);
+            }
+        }
+
+        this.martialarts = [];
+
+        if (cobj.martialarts[0].martialart) {
+            for (var i = 0; i < cobj.martialarts[0].martialart.length; i++) {
+                var newMArt = MartialArt();
+                newMArt.load(cobj.martialarts[0].martialart[i]);
+                this.martialarts.push(newMArt);
             }
         }
     }
