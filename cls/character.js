@@ -249,5 +249,8 @@ exports.Character = class {
                 this.cyberwares.push(newCW);
             }
         }
+
+        // https://github.com/chummer5a/chummer5a/blob/master/Chummer/Classes/clsCharacter.cs#L2116
+        // https://github.com/chummer5a/chummer5a/blob/master/Chummer/Backend/Uniques/Quality.cs#L361
     }
 }
