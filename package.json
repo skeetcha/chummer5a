@@ -1,16 +1,24 @@
 {
   "name": "chummer5a",
   "version": "0.0.1",
-  "description": "A character generator and tracker for Shadowrun 5th Edition",
-  "main": "main.js",
+  "description": "A TypeScript/Electron port of Chummer5a from CSharp",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "electron ."
+    "build": "tsc",
+    "watch": "tsc -w",
+    "lint": "tslint -c tslint.json -p tsconfig.json",
+    "start": "npm run build && electron ./dist/main.js"
   },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/skeetcha/chummer5a.git"
   },
+  "keywords": [
+    "electron",
+    "chummer5a",
+    "chummer",
+    "typescript",
+    "shadowrun"
+  ],
   "author": "Daniel Unterholzner",
   "license": "GPL-3.0-or-later",
   "bugs": {
@@ -18,9 +26,8 @@
   },
   "homepage": "https://github.com/skeetcha/chummer5a#readme",
   "devDependencies": {
-    "electron": "^9.0.0"
-  },
-  "dependencies": {
-    "xml2js": "^0.4.23"
+    "electron": "^9.0.0",
+    "tslint": "^6.1.2",
+    "typescript": "^3.9.3"
   }
 }
