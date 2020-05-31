@@ -11,6 +11,7 @@ const AIProgram = require("./aiprogram.js").AIProgram;
 const MartialArt = require("./martialart.js").MartialArt;
 const LimitModifier = require("./limitmodifier.js").LimitModifier;
 const Armor = require("./armor.js").Armor;
+const Weapon = require("./weapon.js").Weapon;
 
 exports.Character = class {
     constructor() {
@@ -228,7 +229,14 @@ exports.Character = class {
             }
         }
 
-        // https://github.com/chummer5a/chummer5a/blob/master/Chummer/Classes/clsCharacter.cs#L2096
-        // https://github.com/chummer5a/chummer5a/blob/master/Chummer/Backend/Equipment/Weapon.cs#L552
+        this.weapons = [];
+
+        if (cobj.weapons[0].weapon) {
+            for (var i = 0; i < cobj.weapons[0].weapon.length; i++) {
+                var newWeapon = Weapon();
+                newWeapon.load(cobj.weapons[0].weapon[i]);
+                this.weapons.push(newWeapon);
+            }
+        }
     }
 }
