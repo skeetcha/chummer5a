@@ -12,6 +12,7 @@ const MartialArt = require("./martialart.js").MartialArt;
 const LimitModifier = require("./limitmodifier.js").LimitModifier;
 const Armor = require("./armor.js").Armor;
 const Weapon = require("./weapon.js").Weapon;
+const Cyberware = require("./cyberware.js").Cyberware;
 
 exports.Character = class {
     constructor() {
@@ -236,6 +237,16 @@ exports.Character = class {
                 var newWeapon = Weapon();
                 newWeapon.load(cobj.weapons[0].weapon[i]);
                 this.weapons.push(newWeapon);
+            }
+        }
+
+        this.cyberwares = [];
+
+        if (cobj.cyberwares[0].cyberware) {
+            for (var i = 0; i < cobj.cyberwares[0].cyberware.length; i++) {
+                var newCW = Cyberware();
+                newCW.load(cobj.cyberwares[0].cyberware[i]);
+                this.cyberwares.push(newCW);
             }
         }
     }
