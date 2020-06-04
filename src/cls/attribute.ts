@@ -36,8 +36,26 @@ export class Attribute {
     }
 
     public save(): Object {
-        let r: Object;
+        let r: AttributeJSON;
 
-        return r;
+        r.name = this.name;
+        r.min = this.min;
+        r.max = this.max;
+        r.base = this.base;
+        r.points = this.points;
+        r.karma = this.karma;
+
+        switch (this.type) {
+            case AttributeType.Standard:
+                r.type = "Standard";
+                break;
+            case AttributeType.Special:
+                r.type = "Special";
+                break;
+            default:
+                break;
+        }
+
+        return r as Object;
     }
 }
