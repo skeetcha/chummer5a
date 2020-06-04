@@ -3,81 +3,29 @@
     <head>
         <meta charset="UTF-8" />
         <title>Chummer5E</title>
+        <link rel="stylesheet" href="node_modules/electron-tabs/electron-tabs.css" />
         <style>
-            .tab {
-                overflow: hidden;
-                border: 1px solid #ccc;
-                background-color: #f1f1f1;
-            }
-
-            .tab button {
-                background-color: inherit;
-                float: left;
-                border: none;
-                outline: none;
-                cursor: pointer;
-                padding: 14px 16px;
-                transition: 0.3s;
-            }
-
-            .tab button:hover {
-                background-color: #ddd;
-            }
-
-            .tab button.active {
-                background-color: #ccc;
-            }
-            
-            .tabcontent {
-                display: none;
-                padding: 6px 12px;
-                border: 1px solid #ccc;
-                border-top: none;
-                animation: fadeEffect 1s;
-            }
-
-            @keyframes fadeEffect {
-                from {
-                    opacity: 0;
-                }
-                to {
-                    opacity: 1;
-                }
+            body {
+                margin: 0;
             }
         </style>
-        <script type="text/javascript">
-            function openTab(evt, tabName) {
-                var i, tabcontent, tablinks;
-
-                tabcontent = document.getElementsByClassName("tabcontent");
-                for (i = 0; i < tabcontent.length; i++) {
-                    tabcontent[i].style.display = "none";
-                }
-
-                tablinks = document.getElementsByClassName("tablinks");
-                for (i = 0; i < tablinks.length; i++) {
-                    //tablinks[i].className = tablinks[i].className.replace("active", "");
-
-                    while (tablinks[i].className.indexOf("active") > -1) {
-                        tablinks[i].className = tablinks[i].className.replace("active", "").trim();
-                    }
-
-                    document.getElementById(tabName).style.display = "block";
-                    evt.currentTarget.className += " active";
-                }
-            }
-        </script>
     </head>
     <body>
-        <div class="tab">
-            <button id="defaultOpen" class="tablinks" onclick="openTab(event, 'characterList')">Characters</button>
+        <div class="etabs-tabgroup">
+            <div class="etabs-tabs">
+
+            </div>
+            <div class="etabs-buttons">
+
+            </div>
         </div>
 
-        <div id="characterList" class="tabcontent">
-            <h3>Character List</h3>
-            <p>This is the character list.</p>
+        <div class="etabs-views">
+
         </div>
 
-        <script src="./dist/renderer.js"></script>
+        <script>
+            require("./dist/renderer.js");
+        </script>
     </body>
-</html>
+</html
