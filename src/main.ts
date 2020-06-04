@@ -68,6 +68,34 @@ function createWindow() {
         label: "File",
         submenu: [
             {
+                label: "New Character",
+                click: () => {
+                    console.log("New Character not implemented yet");
+                },
+                accelerator: "CmdOrCtrl+N"
+            },
+            {
+                label: "Open",
+                click: () => {
+                    console.log("Open not implemented yet");
+                },
+                accelerator: "CmdOrCtrl+O"
+            },
+            {
+                type: "separator"
+            },
+            {
+                label: "Close Character",
+                click: () => {
+
+                },
+                accelerator: "CmdOrCtrl+W",
+                enabled: false
+            },
+            {
+                type: "separator"
+            },
+            {
                 label: (isMac ? "Close" : "Quit"),
                 click: () => {
                     app.emit("window-all-closed");
