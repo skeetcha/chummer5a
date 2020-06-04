@@ -1,5 +1,6 @@
 import type {Sex} from "../enums/sex";
 import type {AttributeJSON} from "./attribute";
+import type {QualJSON} from "./quality";
 
 export interface CharJson {
     name: string;
@@ -18,4 +19,5 @@ export interface CharJson {
     notes: string;
     playerName: string;
     attributes: Array<AttributeJSON>;
+    qualities: Array<QualJSON>;
 }

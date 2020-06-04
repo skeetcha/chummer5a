@@ -2,6 +2,8 @@ import type {CharJson} from "../interfaces/character";
 import {Metatype} from "../enums/metatype";
 import type {AttributeJSON} from "../interfaces/attribute";
 import {Attribute} from "./attribute";
+import {Quality} from "./quality";
+import type {QualJSON} from "../interfaces/quality";
 
 export class Character {
     public constructor() {
@@ -22,6 +24,7 @@ export class Character {
     private notes: string;
     private playerName: string;
     private attributes: Array<Attribute>;
+    private qualities: Array<Quality>;
 
     public load(data: object): void {
         var ndata = data as CharJson;
@@ -64,10 +67,58 @@ export class Character {
             newAttr.load(val);
             this.attributes.push(newAttr);
         });
+
+        ndata.qualities.forEach((val, i, arr) => {
+            var newQual = new Quality();
+            newQual.load(val);
+            this.qualities.push(newQual);
+        });
     }
 
     public save(): Object {
-        let r: Object;
+        let r: CharJson;
+
+        r.name = this.name;
+        r.alias = this.alias;
+
+        switch (this.metatype) {
+            case Metatype.Human:
+                r.metatype = "Human";
+                break;
+            case Metatype.Elf:
+                r.metatype = "Elf";
+                break;
+            case Metatype.Dwarf:
+                r.metatype = "Dwarf";
+                break;
+            case Metatype.Ork:
+                r.metatype = "Ork";
+                break;
+            case Metatype.Troll:
+                r.metatype = "Troll";
+                break;
+            default:
+                break;
+        }
+
+        r.ethnicity = this.ethnicity;
+        r.height = this.height;
+        r.weight = this.weight;
+        r.streetcred = this.streetcred;
+        r.notoriety = this.notoriety;
+        r.publicAware = this.publicAware;
+        r.karma = this.karma;
+        r.totalKarma = this.totalKarma;
+        r.notes = this.notes;
+        r.playerName = this.playerName;
+
+        this.attributes.forEach((val, i, arr) => {
+            r.attributes.push(val.save() as AttributeJSON);
+        });
+
+        this.qualities.forEach((val, i, arr) => {
+            r.qualities.push(val.save() as QualJSON);
+        })
 
         return r;
     }
