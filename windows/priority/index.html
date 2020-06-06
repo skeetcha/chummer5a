@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width,initial-scale=1.0" />
+        <title>Choose Character Priorities</title>
+        <link rel="stylesheet" href="./index.css" />
+        <script type="text/javascript" src="../../dist/priority/main.js"></script>
+    </head>
+    <body>
+        <div class="row">
+            <p class="col-1"></p>
+            <h3 class="col-2">Priorities</h3>
+            <div class="col-5"></div>
+        </div>
+        <div class="row">
+            <label for="metatype" class="col-2 rightText">Metatype:</label>
+            <select name="metatype" id="metatype" class="col-2 priority" onchange="updatePriority('metatype')">
+                <option value="a" selected>A - Any metatype</option>
+                <option value="b">B - Any metatype</option>
+                <option value="c">C - Human, Dwarf, Elf, or Ork</option>
+                <option value="d">D - Human or Elf</option>
+                <option value="e">E - Human</option>
+            </select>
+            <div class="col-4"></div>
+        </div>
+        <div class="row">
+            <label for="attributes" class="col-2 rightText">Attributes:</label>
+            <select name="attributes" id="attributes" class="col-2 priority" onchange="updatePriority('attributes')">
+                <option value="a">A - 24 (12) Attributes</option>
+                <option value="b" selected>B - 20 (10) Attributes</option>
+                <option value="c">C - 16 (8) Attributes</option>
+                <option value="d">D - 14 (7) Attributes</option>
+                <option value="e">E - 12 (6) Attributes</option>
+            </select>
+            <div class="col-4"></div>
+        </div>
+        <div class="row">
+            <label for="magRes" class="col-2 rightText">Magic/Resonance:</label>
+            <select name="magRes" id="magRes" class="col-2 priority" onchange="updatePriority('magRes')">
+                <option value="a">A - Magician or Technomancer</option>
+                <option value="b">B - Adept, Magician, or Technomancer</option>
+                <option value="c">C - Adept, Magician, or Technomancer</option>
+                <option value="d">D - Adept or Aspected Magician</option>
+                <option value="e" selected>E - Mundane</option>
+            </select>
+            <select name="magResSel" id="magResSel" class="col-4" onchange="updateMagRes()" disabled>
+                <option value="mm" selected>Mundane</option>
+            </select>
+        </div>
+        <div class="row">
+            <label for="skills" class="col-2 rightText">Skills:</label>
+            <select name="skills" id="skills" class="col-2 priority" onchange="updatePriority('skills')">
+                <option value="a">A - 46 Skills/10 Skill Groups</option>
+                <option value="b">B - 36 Skills/5 Skill Groups</option>
+                <option value="c" selected>C - 28 Skills/2 Skill Groups</option>
+                <option value="d">D - 22 Skills/0 Skill Groups</option>
+                <option value="e">E - 18 Skills/0 Skill Groups</option>
+            </select>
+            <div class="col-4"></div>
+        </div>
+        <div class="row">
+            <label for="resources" class="col-2 rightText">Resources:</label>
+            <select name="resources" id="resources" class="col-2 priority" onchange="updatePriority('resources')">
+                <option value="a">A - 450,000¥</option>
+                <option value="b">B - 275,000¥</option>
+                <option value="c">C - 140,000¥</option>
+                <option value="d" selected>D - 50,000¥</option>
+                <option value="e">E - 6,000¥</option>
+            </select>
+            <div class="col-4"></div>
+        </div>
+        <div class="row">
+            <label for="metaSel" class="col-1">Metatype:</label>
+            <pre class="col-2"></pre>
+            <div class="col-1"><b>BOD</b></div>
+            <div class="col-1"><b>AGI</b></div>
+            <div class="col-1"><b>REA</b></div>
+            <div class="col-1"><b>STR</b></div>
+            <div class="col-1"><b>CHA</b></div>
+        </div>
+        <div class="row">
+            <select name="metaSel" id="metaSel" class="col-1" onchange="updateMetatype()">
+                <option value="h">Human</option>
+                <option value="e">Elf</option>
+                <option value="d">Dwarf</option>
+                <option value="o">Ork</option>
+                <option value="t">Troll</option>
+            </select>
+            <pre class="col-2"></pre>
+            <div class="col-1" id="body"></div>
+            <div class="col-1" id="agility"></div>
+            <div class="col-1" id="reaction"></div>
+            <div class="col-1" id="strength"></div>
+            <div class="col-1" id="charisma"></div>
+        </div>
+        <div class="row">
+            <pre class="col-3"></pre>
+            <div class="col-1"><b>INT</b></div>
+            <div class="col-1"><b>LOG</b></div>
+            <div class="col-1"><b>WIL</b></div>
+            <div class="col-2"></div>
+        </div>
+        <div class="row">
+            <pre class="col-3"></pre>
+            <div class="col-1" id="intuition"></div>
+            <div class="col-1" id="logic"></div>
+            <div class="col-1" id="willpower"></div>
+        </div>
+        <div class="row">
+            <pre class="col-3"></pre>
+            <div class="col-1 rightText"><b>Karma:</b></div>
+            <div class="col-4" id="karma">0</div>
+        </div>
+        <div class="row">
+            <pre class="col-3"></pre>
+            <div class="col-1 rightText"><b>Special Attributes:</b></div>
+            <div class="col-4" id="specAttr">9</div>
+        </div>
+        <div class="row">
+            <pre class="col-3"></pre>
+            <div class="col-1 rightText"><b>Qualities:</b></div>
+            <div class="col-4" id="qualities">None</div>
+        </div>
+        <div class="row">
+            <pre class="col-3"></pre>
+            <div class="col-5" id="talentText"></div>
+        </div>
+        <div class="row">
+            <pre class="col-3"></pre>
+            <div class="col-5" id="talent1"></div>
+        </div>
+        <div class="row">
+            <pre class="col-3"></pre>
+            <div class="col-5" id="talent2"></div>
+        </div>
+        <div class="row">
+            <pre class="col-3"></pre>
+            <div class="col-5" id="talent3"></div>
+        </div>
+        <div class="row">
+            <pre class="col-6"></pre>
+            <div class="col-1"><button onclick="cancel()">Cancel</button></div>
+            <div class="col-1"><button onclick="okay()">Okay</button></div>
+        </div>
+    </body>
+</html>

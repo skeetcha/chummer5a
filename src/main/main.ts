@@ -41,10 +41,10 @@ function newCharacter(item: any, window: Electron.BrowserWindow, event: any) {
         }
     });
 
-    newCharWindow.loadFile(path.join(__dirname, "../windows/priority/index.html"));
+    newCharWindow.loadFile(path.join(__dirname, "../../windows/priority/index.html"));
     newCharWindow.setMenu(null);
     openWindows.set("newCharacter", newCharWindow);
-    // newCharWindow.webContents.openDevTools();
+    newCharWindow.webContents.openDevTools();
 
     newCharWindow.on("closed", () => {
         openWindows.delete("newCharacter");
@@ -98,7 +98,7 @@ function createWindow() {
     });
 
     // mainWindow.webContents.openDevTools();
-    mainWindow.loadFile(path.join(__dirname, "../windows/main/index.html"));
+    mainWindow.loadFile(path.join(__dirname, "../../windows/main/index.html"));
 
     mainWindow.on("closed", () => {
         openWindows.forEach((val, key, m) => {

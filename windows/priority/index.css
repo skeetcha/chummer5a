@@ -1,0 +1,50 @@
+* {
+    box-sizing: border-box;
+}
+
+[class*="col-"] {
+    float: left;
+    margin: 1px;
+}
+
+/*.col-1 {
+    width: 99px;
+}
+
+.col-2 {
+    width: 199px;
+}
+
+.col-3 {
+    width: 299px;
+}
+
+.col-4 {
+    width: 399px;
+}
+
+.col-5 {
+    width: 499px;
+}
+
+.col-6 {
+    width: 599px;
+}
+
+.col-7 {
+    width: 699px;
+}
+
+.col-8 {
+    width: 799px;
+}*/
+
+.row::after {
+    content: "";
+    clear: both;
+    display: table;
+}
+
+.rightText {
+    text-align: right;
+}
