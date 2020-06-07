@@ -16,7 +16,12 @@ import type {SkillGroupJSON} from "../interfaces/skillgroup";
 
 export class Character {
     public constructor() {
-
+        this.priorities = new Map<string, Priority>();
+        this.attributes = new Array<Attribute>();
+        this.qualities = new Array<Quality>();
+        this.contacts = new Array<Contact>();
+        this.skills = new Array<Skill>();
+        this.skillGroups = new Array<SkillGroup>();
     }
 
     private name: string;
@@ -629,5 +634,9 @@ export class Character {
 
     public getName(): string {
         return this.name;
+    }
+
+    public isCreated(): boolean {
+        return this.created;
     }
 }
