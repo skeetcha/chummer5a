@@ -8,45 +8,37 @@
             body {
                 margin: 0;
             }
-
-            table {
-                margin: 0;
-            }
-
-            .etabs-tabgroup {
-                background: #444;
-            }
-
-            .etabs-tabgroup .etabs-tab .etabs-tab {
-                border-radius: 10px 10px 0 0;
+            
+            iframe {
+                width: 100%;
+                height: 100%;
             }
         </style>
     </head>
     <body>
-        <table border=0 style="width:100%;">
+        <table border=0 style="width:99%;height:100%;">
             <tr>
                 <td>
-                    <div id="left">
+                    <iframe src="tabs/sheet/index.html">IFrame is not supported here.</iframe>
+                    <!--<div id="left">
                         <div class="etabs-tabgroup">
                             <div class="etabs-tabs"></div>
                             <div class="etabs-buttons"></div>
                         </div>
                         <div class="etabs-views"></div>
-                    </div>
+                    </div>-->
                 </td>
                 <td>
-                    <div id="right">
+                    <iframe src="tabs/info/index.html">IFrame is not supported here.</iframe>
+                    <!--<div id="right">
                         <div class="etabs-tabgroup">
                             <div class="etabs-tabs"></div>
                             <div class="etabs-buttons"></div>
                         </div>
                         <div class="etabs-views"></div>
-                    </div>
+                    </div>-->
                 </td>
             </tr>
         </table>
-        <script>
-            require("../../dist/character/renderer.js");
-        </script>
     </body>
 </html>
