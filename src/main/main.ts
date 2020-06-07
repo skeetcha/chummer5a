@@ -1,4 +1,4 @@
-import {app, BrowserWindow, Menu, MenuItem, dialog} from "electron";
+import {app, BrowserWindow, Menu, MenuItem, dialog, ipcMain} from "electron";
 import * as path from "path";
 
 let mainWindow: Electron.BrowserWindow;
@@ -45,6 +45,15 @@ function newCharacter(item: any, window: Electron.BrowserWindow, event: any) {
     newCharWindow.setMenu(null);
     openWindows.set("newCharacter", newCharWindow);
     newCharWindow.webContents.openDevTools();
+
+    ipcMain.on("newCharWindow-cancel-window", (event, args) => {
+        newCharWindow.close();
+    });
+
+    ipcMain.on("newCharWindow-okay-window", (event, args) => {
+        newCharWindow.close();
+        console.log(args);
+    });
 
     newCharWindow.on("closed", () => {
         openWindows.delete("newCharacter");
