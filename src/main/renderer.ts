@@ -12,3 +12,5 @@ let tabGroup = new TabGroup({});
 ipcRenderer.on("mainWindow-add-tab", (event, args) => {
     tabGroup.addTab(args);
 });
+
+export {};

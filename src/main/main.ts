@@ -4,7 +4,7 @@ import {Character} from "../cls/character";
 import * as fs from "fs";
 
 let mainWindow: Electron.BrowserWindow;
-let openWindows: Map<string, Electron.BrowserWindow> = new Map<string, Electron.BrowserWindow>();
+let openWindows: Map<string, Electron.BrowserWindow>;
 let openCharacters: Array<Character>;
 
 function aboutDialog(item: any, window: Electron.BrowserWindow, event: any) {
@@ -47,7 +47,7 @@ function newCharacter(item: any, window: Electron.BrowserWindow, event: any) {
     newCharWindow.loadFile(path.join(__dirname, "../../windows/priority/index.html"));
     newCharWindow.setMenu(null);
     openWindows.set("newCharacter", newCharWindow);
-    newCharWindow.webContents.openDevTools();
+    // newCharWindow.webContents.openDevTools();
 
     ipcMain.on("newCharWindow-cancel-window", (event, args) => {
         newCharWindow.close();
@@ -59,7 +59,7 @@ function newCharacter(item: any, window: Electron.BrowserWindow, event: any) {
         newChar.create(args);
         openCharacters.push(newChar);
         mainWindow.webContents.send("mainWindow-add-tab", {
-            title: newChar.getName(),
+            title: "New Character - Create Mode",
             src: path.join(__dirname, "../../windows/character/index.html"),
             visible: true,
             webPreferences: {
@@ -106,9 +106,10 @@ function openCharacter(item: any, window: Electron.BrowserWindow, event: any) {
         newChar.load(jdata);
         openCharacters.push(newChar);
         mainWindow.webContents.send("mainWindow-add-tab", {
-            title: newChar.getName(),
+            title: newChar.getName() + (newChar.isCreated() ? " - Career Mode" : " - Create Mode"),
             src: path.join(__dirname, "../../windows/character/index.html"),
             visible: true,
+            active: true,
             webPreferences: {
                 nodeIntegration: true,
                 webviewTag: true
@@ -168,7 +169,7 @@ function createWindow() {
         webPreferences: {
             nodeIntegration: true,
             webviewTag: true,
-            preload: path.join(__dirname, "preload.js")
+            preload: path.join(__dirname, "../../dist/main/preload.js")
         }
     });
 
@@ -276,7 +277,7 @@ function createWindow() {
             submenu: [
                 {
                     label: "Copy",
-                    click: copyData,
+                    click: () => mainWindow.webContents.openDevTools(),
                     accelerator: "CmdOrCtrl+C"
                 },
                 {
@@ -334,6 +335,8 @@ function createWindow() {
     }));
 
     Menu.setApplicationMenu(menu);
+    openWindows = new Map<string, Electron.BrowserWindow>();
+    openCharacters = new Array<Character>();
 }
 
 app.on("ready", createWindow);
