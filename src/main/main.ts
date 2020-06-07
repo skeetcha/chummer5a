@@ -109,10 +109,12 @@ function openCharacter(item: any, window: Electron.BrowserWindow, event: any) {
             title: newChar.getName() + (newChar.isCreated() ? " - Career Mode" : " - Create Mode"),
             src: path.join(__dirname, "../../windows/character/index.html"),
             visible: true,
-            active: true,
             webPreferences: {
                 nodeIntegration: true,
                 webviewTag: true
+            },
+            ready: (tab: any) => {
+                tab.activate();
             }
         });
     });
