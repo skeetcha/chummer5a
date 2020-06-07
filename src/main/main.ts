@@ -1,11 +1,11 @@
 import {app, BrowserWindow, Menu, MenuItem, dialog, ipcMain} from "electron";
 import * as path from "path";
 import {Character} from "../cls/character";
-import * as tabGroup from "../main/renderer";
+import * as fs from "fs";
 
 let mainWindow: Electron.BrowserWindow;
 let openWindows: Map<string, Electron.BrowserWindow> = new Map<string, Electron.BrowserWindow>();
-let openCharacters: Character;
+let openCharacters: Array<Character>;
 
 function aboutDialog(item: any, window: Electron.BrowserWindow, event: any) {
     dialog.showMessageBoxSync(window, {
@@ -55,10 +55,11 @@ function newCharacter(item: any, window: Electron.BrowserWindow, event: any) {
 
     ipcMain.on("newCharWindow-okay-window", (event, args) => {
         newCharWindow.close();
-        var newCharacter = new Character();
-        newCharacter.create(args);
+        var newChar = new Character();
+        newChar.create(args);
+        openCharacters.push(newChar);
         mainWindow.webContents.send("mainWindow-add-tab", {
-            title: newCharacter.getName(),
+            title: newChar.getName(),
             src: path.join(__dirname, "../../windows/character/index.html"),
             visible: true,
             webPreferences: {
@@ -73,7 +74,7 @@ function newCharacter(item: any, window: Electron.BrowserWindow, event: any) {
 }
 
 function openCharacter(item: any, window: Electron.BrowserWindow, event: any) {
-    dialog.showOpenDialogSync(window, {
+    var file: string = dialog.showOpenDialogSync(window, {
         title: "Open a character sheet",
         properties: [
             "openFile"
@@ -92,7 +93,28 @@ function openCharacter(item: any, window: Electron.BrowserWindow, event: any) {
                 ]
             }
         ]
-    })
+    })[0];
+
+    fs.readFile(file, {}, (err, data: string) => {
+        if (err) {
+            dialog.showErrorBox("Error: Could not open file.", "Could not open file " + file);
+            return;
+        }
+
+        var jdata: Object = JSON.parse(data);
+        var newChar = new Character();
+        newChar.load(jdata);
+        openCharacters.push(newChar);
+        mainWindow.webContents.send("mainWindow-add-tab", {
+            title: newChar.getName(),
+            src: path.join(__dirname, "../../windows/character/index.html"),
+            visible: true,
+            webPreferences: {
+                nodeIntegration: true,
+                webviewTag: true
+            }
+        });
+    });
 }
 
 function closeCharacter(item: any, window: Electron.BrowserWindow, event: any) {
@@ -104,6 +126,38 @@ function closeQuit(item: any, window: Electron.BrowserWindow, event: any) {
 }
 
 function reportAnIssue(item: any, window: Electron.BrowserWindow, event: any) {
+
+}
+
+function copyData(item: any, window: Electron.BrowserWindow, event: any) {
+
+}
+
+function pasteData(item: any, window: Electron.BrowserWindow, event: any) {
+
+}
+
+function openDiceRoller(item: any, window: Electron.BrowserWindow, event: any) {
+
+}
+
+function openOptions(item: any, window: Electron.BrowserWindow, event: any) {
+
+}
+
+function checkForUpdates(item: any, window: Electron.BrowserWindow, event: any) {
+
+}
+
+function changePrioritySelection(item: any, window: Electron.BrowserWindow, event: any) {
+
+}
+
+function changeOptionsFile(item: any, window: Electron.BrowserWindow, event: any) {
+
+}
+
+function checkCharacterValid(item: any, window: Electron.BrowserWindow, event: any) {
 
 }
 
@@ -152,6 +206,11 @@ function createWindow() {
                     click: unhide
                 },
                 {
+                    label: "Preferences",
+                    click: openOptions,
+                    accelerator: "CmdOrCtrl+,"
+                },
+                {
                     type: "separator"
                 },
                 {
@@ -194,6 +253,68 @@ function createWindow() {
         ]
     }));
 
+    if (isMac) {
+        menu.append(new MenuItem({
+            label: "Edit",
+            submenu: [
+                {
+                    label: "Copy",
+                    click: copyData,
+                    accelerator: "CmdOrCtrl+C"
+                },
+                {
+                    label: "Paste",
+                    click: pasteData,
+                    accelerator: "CmdOrCtrl+V"
+                }
+            ]
+        }));
+    }
+    else {
+        menu.append(new MenuItem({
+            label: "Edit",
+            submenu: [
+                {
+                    label: "Copy",
+                    click: copyData,
+                    accelerator: "CmdOrCtrl+C"
+                },
+                {
+                    label: "Paste",
+                    click: pasteData,
+                    accelerator: "CmdOrCtrl+V"
+                },
+                {
+                    label: "Preferences",
+                    click: openOptions,
+                    accelerator: "CmdOrCtrl+,"
+                }
+            ]
+        }));
+    }
+
+    menu.append(new MenuItem({
+        label: "Tools",
+        submenu: [
+            {
+                label: "Dice Roller",
+                click: openDiceRoller
+            },
+            {
+                label: "Change Priority Selection",
+                click: changePrioritySelection
+            },
+            {
+                label: "Change Options File",
+                click: changeOptionsFile
+            },
+            {
+                label: "Check Character Validity",
+                click: checkCharacterValid
+            }
+        ]
+    }));
+
     menu.append(new MenuItem({
         label: "Help",
         submenu: [
@@ -204,6 +325,10 @@ function createWindow() {
             {
                 label: "Report an Issue",
                 click: reportAnIssue
+            },
+            {
+                label: "Check for Updates",
+                click: checkForUpdates
             }
         ]
     }));
