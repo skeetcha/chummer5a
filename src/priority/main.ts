@@ -1,3 +1,5 @@
+const {ipcRenderer} = require("electron");
+
 function updateMagRes() {
     var magRes: string = (document.getElementById("magRes") as HTMLSelectElement).value;
     var magResSel: HTMLSelectElement = document.getElementById("magResSel") as HTMLSelectElement;
@@ -391,6 +393,28 @@ function updateMetatype() {
             document.getElementById("logic").innerText = "1/6 (10)";
             document.getElementById("willpower").innerText = "1/6 (10)";
             document.getElementById("qualities").innerText = "None";
+
+            switch (metatypePriority) {
+                case "a":
+                    document.getElementById("specAttr").innerText = "9";
+                    break;
+                case "b":
+                    document.getElementById("specAttr").innerText = "7";
+                    break;
+                case "c":
+                    document.getElementById("specAttr").innerText = "5";
+                    break;
+                case "d":
+                    document.getElementById("specAttr").innerText = "3";
+                    break;
+                case "e":
+                    document.getElementById("specAttr").innerText = "1";
+                    break;
+                default:
+                    document.getElementById("specAttr").innerText = "0";
+                    break;
+            }
+
             break;
         case 1:
             document.getElementById("body").innerText = "1/6 (10)";
@@ -401,6 +425,21 @@ function updateMetatype() {
             document.getElementById("intuition").innerText = "1/6 (10)";
             document.getElementById("logic").innerText = "1/6 (10)";
             document.getElementById("qualities").innerText = "Low-Light Vision";
+
+            switch (metatypePriority) {
+                case "a":
+                    document.getElementById("specAttr").innerText = "8";
+                    break;
+                case "b":
+                    document.getElementById("specAttr").innerText = "6";
+                    break;
+                case "c":
+                    document.getElementById("specAttr").innerText = "3";
+                    break;
+                default:
+                    document.getElementById("specAttr").innerText = "0";
+                    break;
+            }
             break;
         case 2:
             document.getElementById("body").innerText = "3/8 (12)";
@@ -412,6 +451,21 @@ function updateMetatype() {
             document.getElementById("logic").innerText = "1/6 (10)";
             document.getElementById("willpower").innerText = "2/7 (11)";
             document.getElementById("qualities").innerText = "Thermographic Vision, Resistance to Pathogens/Toxens";
+
+            switch (metatypePriority) {
+                case "a":
+                    document.getElementById("specAttr").innerText = "7";
+                    break;
+                case "b":
+                    document.getElementById("specAttr").innerText = "4";
+                    break;
+                case "c":
+                    document.getElementById("specAttr").innerText = "1";
+                    break;
+                default:
+                    document.getElementById("specAttr").innerText = "0";
+                    break;
+            }
             break;
         case 3:
             document.getElementById("body").innerText = "4/9 (13)";
@@ -423,6 +477,18 @@ function updateMetatype() {
             document.getElementById("logic").innerText = "1/5 (9)";
             document.getElementById("willpower").innerText = "1/6 (10)";
             document.getElementById("qualities").innerText = "Low-Light Vision";
+
+            switch (metatypePriority) {
+                case "a":
+                    document.getElementById("specAttr").innerText = "7";
+                    break;
+                case "b":
+                    document.getElementById("specAttr").innerText = "4";
+                    break;
+                default:
+                    document.getElementById("specAttr").innerText = "0";
+                    break;
+            }
             break;
         case 4:
             document.getElementById("body").innerText = "5/10 (14)";
@@ -434,6 +500,15 @@ function updateMetatype() {
             document.getElementById("logic").innerText = "1/5 (9)";
             document.getElementById("willpower").innerText = "1/6 (10)";
             document.getElementById("qualities").innerText = "Thermographic Vision";
+
+            switch (metatypePriority) {
+                case "a":
+                    document.getElementById("specAttr").innerText = "5";
+                    break;
+                default:
+                    document.getElementById("specAttr").innerText = "0";
+                    break;
+            }
             break;
         default:
             break;
@@ -472,9 +547,34 @@ function updatePriority(id: string) {
 }
 
 function cancel() {
-    window.close();
+    ipcRenderer.send("newCharWindow-cancel-window", {});
 }
 
 function okay() {
+    let Data = {
+        priorities: {
+            metatype: (document.getElementById("metatype") as HTMLSelectElement).value,
+            attributes: (document.getElementById("attributes") as HTMLSelectElement).value,
+            magRes: (document.getElementById("magRes") as HTMLSelectElement).value,
+            skills: (document.getElementById("skills") as HTMLSelectElement).value,
+            resources: (document.getElementById("resources") as HTMLSelectElement).value
+        }, 
+        magTalent: (document.getElementById("magResSel") as HTMLSelectElement).value,
+        talentChoices: Array<string>(),
+        metatype: (document.getElementById("metaSel") as HTMLSelectElement).value
+    };
 
+    if (document.querySelectorAll("select#talent1Sel").length > 0) {
+        Data.talentChoices.push((document.getElementById("talent1Sel") as HTMLSelectElement).value);
+    }
+
+    if (document.querySelectorAll("select#talent2Sel").length > 0) {
+        Data.talentChoices.push((document.getElementById("talent2Sel") as HTMLSelectElement).value);
+    }
+
+    if (document.querySelectorAll("select#talent3Sel").length > 0) {
+        Data.talentChoices.push((document.getElementById("talent3Sel") as HTMLSelectElement).value);
+    }
+
+    ipcRenderer.send("newCharWindow-okay-window", Data);
 }
