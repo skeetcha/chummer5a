@@ -1,8 +1,11 @@
 import {app, BrowserWindow, Menu, MenuItem, dialog, ipcMain} from "electron";
 import * as path from "path";
+import {Character} from "../cls/character";
+import * as tabGroup from "../main/renderer";
 
 let mainWindow: Electron.BrowserWindow;
 let openWindows: Map<string, Electron.BrowserWindow> = new Map<string, Electron.BrowserWindow>();
+let openCharacters: Character;
 
 function aboutDialog(item: any, window: Electron.BrowserWindow, event: any) {
     dialog.showMessageBoxSync(window, {
@@ -52,7 +55,16 @@ function newCharacter(item: any, window: Electron.BrowserWindow, event: any) {
 
     ipcMain.on("newCharWindow-okay-window", (event, args) => {
         newCharWindow.close();
-        console.log(args);
+        var newCharacter = new Character();
+        newCharacter.create(args);
+        mainWindow.webContents.send("mainWindow-add-tab", {
+            title: newCharacter.getName(),
+            src: path.join(__dirname, "../../windows/character/index.html"),
+            visible: true,
+            webPreferences: {
+                nodeIntegration: true
+            }
+        });
     });
 
     newCharWindow.on("closed", () => {

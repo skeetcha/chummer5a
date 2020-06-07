@@ -1,4 +1,5 @@
 const TabGroup = require("electron-tabs");
+import {ipcRenderer} from "electron";
 
 let tabGroup = new TabGroup({});
 
@@ -8,4 +9,6 @@ let tabGroup = new TabGroup({});
     visible: true
 });*/
 
-exports = tabGroup;
+ipcRenderer.on("mainWindow-add-tab", (event, args) => {
+    tabGroup.addTab(args);
+});

@@ -2,6 +2,9 @@ import type {Sex} from "../enums/sex";
 import type {AttributeJSON} from "./attribute";
 import type {QualJSON} from "./quality";
 import type {ContactJSON} from "./contact";
+import type {PriorityJSON} from "./priority";
+import type {SkillJSON} from "./skill";
+import type {SkillGroupJSON} from "./skillgroup";
 
 export interface CharJson {
     name: string;
@@ -22,4 +25,9 @@ export interface CharJson {
     attributes: Array<AttributeJSON>;
     qualities: Array<QualJSON>;
     contacts: Array<ContactJSON>;
+    magType: string;
+    created: boolean;
+    priorities?: PriorityJSON;
+    skills: Array<SkillJSON>;
+    skillGroups: Array<SkillGroupJSON>;
 }
