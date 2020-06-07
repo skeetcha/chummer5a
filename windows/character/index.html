@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8" />
+        <title>Character</title>
+        <link rel="stylesheet" href="../../node_modules/electron-tabs/electron-tabs.css" />
+        <style>
+            body {
+                margin: 0;
+            }
+
+            table {
+                margin: 0;
+            }
+
+            .etabs-tabgroup {
+                background: #444;
+            }
+
+            .etabs-tabgroup .etabs-tab .etabs-tab {
+                border-radius: 10px 10px 0 0;
+            }
+        </style>
+    </head>
+    <body>
+        <table border=0 style="width:100%;">
+            <tr>
+                <td>
+                    <div id="left">
+                        <div class="etabs-tabgroup">
+                            <div class="etabs-tabs"></div>
+                            <div class="etabs-buttons"></div>
+                        </div>
+                        <div class="etabs-views"></div>
+                    </div>
+                </td>
+                <td>
+                    <div id="right">
+                        <div class="etabs-tabgroup">
+                            <div class="etabs-tabs"></div>
+                            <div class="etabs-buttons"></div>
+                        </div>
+                        <div class="etabs-views"></div>
+                    </div>
+                </td>
+            </tr>
+        </table>
+        <script type="text/javascript" src="../../dist/character/renderer.js"></script>
+    </body>
+</html>
